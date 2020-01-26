@@ -9,38 +9,39 @@ import java.util.Scanner;
 public class RangeMain {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Range range = new Range(0, 0);
+        Range range1 = new Range(0, 0);
+        Range range2 = new Range(0, 0);
 
         System.out.println("Введите число: ");
         double number = scanner.nextDouble();
         System.out.println();
 
-        range.setFrom(3);
-        System.out.println("Начало диапазона 1: " + range.getFrom());
+        range1.setFrom(2);
+        System.out.println("Начало диапазона 1: " + range1.getFrom());
 
-        range.setTo(11);
-        System.out.println("Конец диапазона 1: " + range.getTo());
+        range1.setTo(10);
+        System.out.println("Конец диапазона 1: " + range1.getTo());
 
-        double length1 = range.getLength1();
-        System.out.println("Длина диапазона 1: " + length1);
+        double length = range1.getLength();
+        System.out.println("Длина диапазона 1: " + length);
 
-        if (range.isInside1(number)) {
+        if (range1.isInside(number)) {
             System.out.println("Число " + number + " принадлежит диапазону 1:)");
         } else {
             System.out.println("Число " + number + " не принадлежит диапазону 1:(");
         }
         System.out.println();
 
-        double from = 3;
-        System.out.println("Начало диапазона 2: " + from);
+        range2.setFrom(10);
+        System.out.println("Начало диапазона 2: " + range2.getFrom());
 
-        double to = 5;
-        System.out.println("Конец диапазона 2: " + to);
+        range2.setTo(15);
+        System.out.println("Конец диапазона 2: " + range2.getTo());
 
-        double length2 = range.getLength2(from, to);
+        double length2 = range2.getLength();
         System.out.println("Длина диапазона 2: " + length2);
 
-        if (range.isInside2(number, from, to)) {
+        if (range2.isInside(number)) {
             System.out.println("Число " + number + " принадлежит диапазону 2:)");
         } else {
             System.out.println("Число " + number + " не принадлежит диапазону 2:(");
@@ -48,14 +49,14 @@ public class RangeMain {
         System.out.println();
 
         System.out.println("Пересечение диапазонов: ");
-        System.out.println(Arrays.toString(range.intervalsIntersection(from, to)));
+        System.out.println(range1.getIntersection(range2));
         System.out.println();
 
         System.out.println("Сложение диапазонов: ");
-        System.out.println(Arrays.toString(range.intervalsAddition(from, to)));
+        System.out.println(range1.getUnion(range2));
         System.out.println();
 
         System.out.println("Разность диапазонов: ");
-        System.out.println(Arrays.toString(range.intervalsDifference(from, to)));
+        System.out.println(Arrays.toString(range1.getDifference(range2)));
     }
 }

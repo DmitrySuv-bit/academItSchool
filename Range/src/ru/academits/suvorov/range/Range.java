@@ -25,93 +25,59 @@ public class Range {
         this.to = to;
     }
 
-    public double getLength1() {
-        return this.to - this.from;
-    }
-
-    public double getLength2(double from, double to) {
+    public double getLength() {
         return to - from;
     }
 
-    public boolean isInside1(double number) {
+    public boolean isInside(double number) {
         return number >= from && number <= to;
     }
 
-    public boolean isInside2(double number, double from, double to) {
-        return number >= from && number <= to;
-    }
+    public String getUnion(Range range2) {
+        if (this.from <= range2.to && this.to >= range2.from) {
+            double x = Math.min(this.from, range2.from);
+            double y = Math.max(this.to, range2.to);
 
-    public double[] intervalsAddition(double from, double to) {
-        double[] intervalsAdditionResult;
+            return "(" + x + " ; " + y + ")";
+        }
 
-        if (this.from == from && this.to == to) {
-            intervalsAdditionResult = new double[]{this.from, this.to};
-            return intervalsAdditionResult;
-        }
-        if (this.from == from) {
-            intervalsAdditionResult = new double[]{this.from, Math.min(this.to, to), Math.min(this.to, to), Math.max(this.to, to)};
-            return intervalsAdditionResult;
-        }
-        if (this.to == to) {
-            intervalsAdditionResult = new double[]{Math.min(this.from, from), Math.max(this.from, from), Math.max(this.from, from), this.to};
-            return intervalsAdditionResult;
-        }
-        if (this.to == from || to == this.from) {
-            intervalsAdditionResult = new double[]{Math.min(this.from, from), Math.max(this.from, from), Math.min(this.to, to), Math.max(this.to, to)};
-            return intervalsAdditionResult;
-        }
-        if (this.from < to && this.to > from) {
-            intervalsAdditionResult = new double[]{Math.min(this.from, from), Math.max(this.from, from), Math.max(this.from, from), Math.min(this.to, to), Math.min(this.to, to), Math.max(this.to, to)};
-            return intervalsAdditionResult;
-        }
         return null;
     }
 
-    public double[] intervalsIntersection(double from, double to) {
-        double[] intervalsIntersectionResult;
+    public String getIntersection(Range range2) {
+        if (this.from < range2.to && this.to > range2.from) {
+            double x = Math.max(this.from, range2.from);
+            double y = Math.min(this.to, range2.to);
 
-        if (this.from < to && this.to > from) {
-            intervalsIntersectionResult = new double[]{Math.max(this.from, from), Math.min(this.to, to)};
-            return intervalsIntersectionResult;
+            return "(" + x + " ; " + y + ")";
         }
-        if (this.to == from) {
-            intervalsIntersectionResult = new double[]{this.to};
-            return intervalsIntersectionResult;
-        }
-        if (this.from == to) {
-            intervalsIntersectionResult = new double[]{this.from};
-            return intervalsIntersectionResult;
-        }
+
         return null;
     }
 
-    public double[] intervalsDifference(double from, double to) {
-        double[] intervalsDifferenceResult;
+    public String[] getDifference(Range range2) {
+        if (this.from > range2.from && this.from < range2.to) {
+            double x = Math.min(this.to, range2.to);
+            double y = Math.max(this.to, range2.to);
 
-        if (this.from >= from && this.to <= to) {
-            intervalsDifferenceResult = new double[]{0};
-            return intervalsDifferenceResult;
+            return new String[]{"(" + x + " ; " + y + ")"};
         }
-        if (this.from == from) {
-            intervalsDifferenceResult = new double[]{Math.min(this.to, to), Math.max(this.to, to)};
-            return intervalsDifferenceResult;
+        if (this.to > range2.from && this.to < range2.to) {
+            double x = Math.min(this.from, range2.from);
+            double y = Math.max(this.from, range2.from);
+
+            return new String[]{"(" + x + " ; " + y + ")"};
         }
-        if (this.to == to) {
-            intervalsDifferenceResult = new double[]{Math.min(this.from, from), Math.max(this.from, from)};
-            return intervalsDifferenceResult;
+        if (range2.from > this.from && range2.to < this.to) {
+            double x1 = Math.min(this.from, range2.from);
+            double y1 = Math.max(this.from, range2.from);
+
+            double x2 = Math.min(this.to, range2.to);
+            double y2 = Math.max(this.to, range2.to);
+
+            return new String[]{"(" + x1 + " ; " + y1 + ")", "(" + x2 + " ; " + y2 + ")"};
         }
-        if (this.from > from && this.from < to) {
-            intervalsDifferenceResult = new double[]{Math.min(this.to, to), Math.max(this.to, to)};
-            return intervalsDifferenceResult;
-        }
-        if (this.to > from && this.to < to) {
-            intervalsDifferenceResult = new double[]{Math.min(this.from, from), Math.max(this.from, from)};
-            return intervalsDifferenceResult;
-        }
-        if (this.from < to && this.to > from) {
-            intervalsDifferenceResult = new double[]{Math.min(this.from, from), Math.max(this.from, from), Math.min(this.to, to), Math.max(this.to, to)};
-            return intervalsDifferenceResult;
-        }
-        return null;
+
+        return new String[]{};
     }
 }
