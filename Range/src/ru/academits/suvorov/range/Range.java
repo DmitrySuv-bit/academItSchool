@@ -33,51 +33,41 @@ public class Range {
         return number >= from && number <= to;
     }
 
-    public String getUnion(Range range2) {
-        if (this.from <= range2.to && this.to >= range2.from) {
-            double x = Math.min(this.from, range2.from);
-            double y = Math.max(this.to, range2.to);
+    @Override
+    public String toString() {
+        return "(" + from + "; " + to + ")";
+    }
 
-            return "(" + x + " ; " + y + ")";
+    public Range getIntersection(Range range) {
+        if (from < range.to && to > range.from) {
+            return new Range(Math.max(from, range.from), Math.min(to, range.to));
         }
 
         return null;
     }
 
-    public String getIntersection(Range range2) {
-        if (this.from < range2.to && this.to > range2.from) {
-            double x = Math.max(this.from, range2.from);
-            double y = Math.min(this.to, range2.to);
-
-            return "(" + x + " ; " + y + ")";
+    public Range[] getUnion(Range range) {
+        if (from <= range.to && to >= range.from) {
+            return new Range[]{new Range(Math.min(from, range.from), Math.max(to, range.to))};
         }
 
-        return null;
+        return new Range[]{new Range(from, to), new Range(range.from, range.to)};
     }
 
-    public String[] getDifference(Range range2) {
-        if (this.from > range2.from && this.from < range2.to) {
-            double x = Math.min(this.to, range2.to);
-            double y = Math.max(this.to, range2.to);
-
-            return new String[]{"(" + x + " ; " + y + ")"};
+    public Range[] getDifference(Range range) {
+        if (range.from >= to || range.to <= from) {
+            return null;
         }
-        if (this.to > range2.from && this.to < range2.to) {
-            double x = Math.min(this.from, range2.from);
-            double y = Math.max(this.from, range2.from);
-
-            return new String[]{"(" + x + " ; " + y + ")"};
+        if (from < range.from && to <= range.to) {
+            return new Range[]{new Range(from, range.from)};
         }
-        if (range2.from > this.from && range2.to < this.to) {
-            double x1 = Math.min(this.from, range2.from);
-            double y1 = Math.max(this.from, range2.from);
-
-            double x2 = Math.min(this.to, range2.to);
-            double y2 = Math.max(this.to, range2.to);
-
-            return new String[]{"(" + x1 + " ; " + y1 + ")", "(" + x2 + " ; " + y2 + ")"};
+        if (from >= range.from && to > range.to) {
+            return new Range[]{new Range(range.to, to)};
+        }
+        if (range.from > from && range.to < to) {
+            return new Range[]{new Range(from, range.from), new Range(range.to, to)};
         }
 
-        return new String[]{};
+        return new Range[]{};
     }
 }
