@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class RangeMain {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Range[] ranges = new Range[]{new Range(2, 10), new Range(-5, 2), new Range(7, 10)};
+        Range[] ranges = new Range[]{new Range(2, 10), new Range(2, 4), new Range(7, 10)};
 
         System.out.println("Введите число: ");
         double number = scanner.nextDouble();
