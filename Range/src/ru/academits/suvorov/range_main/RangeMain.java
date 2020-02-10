@@ -1,6 +1,7 @@
 package ru.academits.suvorov.range_main;
 
 import ru.academits.suvorov.range.Range;
+
 import java.util.Arrays;
 import java.util.Scanner;
 
