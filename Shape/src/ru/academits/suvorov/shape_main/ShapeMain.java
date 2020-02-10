@@ -3,7 +3,6 @@ package ru.academits.suvorov.shape_main;
 import ru.academits.suvorov.shape_comparator.AreaComparator;
 import ru.academits.suvorov.shape_comparator.PerimeterComparator;
 import ru.academits.suvorov.shape_interface.ShapeInterface;
-
 import ru.academits.suvorov.shape.*;
 
 import java.util.Arrays;
