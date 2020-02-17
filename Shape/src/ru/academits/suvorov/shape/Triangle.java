@@ -2,8 +2,6 @@ package ru.academits.suvorov.shape;
 
 import ru.academits.suvorov.shape_interface.ShapeInterface;
 
-import java.util.Objects;
-
 public class Triangle implements ShapeInterface {
     private double x1;
     private double y1;
@@ -23,65 +21,56 @@ public class Triangle implements ShapeInterface {
 
     @Override
     public String toString() {
-        return "Shape: Triangle\n" + "vertex coordinates (x; y) : " + "(" + x1 + "; " + y1 + ")\t" + "(" + x2 + "; " + y2 + ")\t" + "(" + x3 + "; " + y3 + ")\t" + "\nArea = " + getArea() + "\nPerimeter = " + getPerimeter();
+        return "Shape: Triangle - " + "vertex coordinates (x; y) : " + "(" + x1 + "; " + y1 + ")\t" + "(" + x2 + "; " + y2 + ")\t" + "(" + x3 + "; " + y3 + ")\t" + ", Area = " + getArea() + ", Perimeter = " + getPerimeter() + ", Width = " + getWidth() + ", Height = " + getHeight();
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Triangle triangle = (Triangle) o;
-        return Double.compare(triangle.x1, x1) == 0 &&
-                Double.compare(triangle.y1, y1) == 0 &&
-                Double.compare(triangle.x2, x2) == 0 &&
-                Double.compare(triangle.y2, y2) == 0 &&
-                Double.compare(triangle.x3, x3) == 0 &&
-                Double.compare(triangle.y3, y3) == 0;
+
+        return triangle.x1 == x1 && triangle.y1 == y1 && triangle.x2 == x2 && triangle.y2 == y2 && triangle.x3 == x3 && triangle.y3 == y3;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(x1, y1, x2, y2, x3, y3);
+        final int prime = 37;
+        int hash = 1;
+
+        hash = prime * hash + Double.hashCode(x1);
+        hash = prime * hash + Double.hashCode(y1);
+        hash = prime * hash + Double.hashCode(x2);
+        hash = prime * hash + Double.hashCode(y2);
+        hash = prime * hash + Double.hashCode(x3);
+        hash = prime * hash + Double.hashCode(y3);
+
+        return hash;
     }
 
     @Override
     public double getWidth() {
-        double max = x1;
-        if (max < x2) {
-            max = x2;
-        }
-        if (max < x3) {
-            max = x3;
-        }
+        double max = Math.max(x1, x2);
+        max = Math.max(max, x3);
 
-        double min = x1;
-        if (min > x2) {
-            min = x2;
-        }
-        if (min > x3) {
-            min = x3;
-        }
+        double min = Math.min(x1, x2);
+        min = Math.min(min, x3);
 
         return max - min;
     }
 
     @Override
     public double getHeight() {
-        double max = y1;
-        if (max < y2) {
-            max = y2;
-        }
-        if (max < y3) {
-            max = y3;
-        }
+        double max = Math.max(y1, y2);
+        max = Math.max(max, y3);
 
-        double min = y1;
-        if (min > y2) {
-            min = y2;
-        }
-        if (min > y3) {
-            min = y3;
-        }
+        double min = Math.min(y1, y2);
+        min = Math.min(min, y3);
+
         return max - min;
     }
 
@@ -92,9 +81,58 @@ public class Triangle implements ShapeInterface {
 
     @Override
     public double getPerimeter() {
-        double a = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-        double b = Math.sqrt(Math.pow(x3 - x2, 2) + Math.pow(y3 - y2, 2));
-        double c = Math.sqrt(Math.pow(x3 - x1, 2) + Math.pow(y3 - y1, 2));
-        return a + b + c;
+        return getSizeLength(x2, x1, y2, y1) + getSizeLength(x3, x2, y3, y2) + getSizeLength(x3, x1, y3, y1);
+    }
+
+    public double getSizeLength(double a, double b, double c, double f) {
+        return Math.sqrt(Math.pow(a - b, 2) + Math.pow(c - f, 2));
+    }
+
+    public double getX1() {
+        return x1;
+    }
+
+    private void setX1(double x1) {
+        this.x1 = x1;
+    }
+
+    public double getY1() {
+        return y1;
+    }
+
+    private void setY1(double y1) {
+        this.y1 = y1;
+    }
+
+    public double getX2() {
+        return x2;
+    }
+
+    private void setX2(double x2) {
+        this.x2 = x2;
+    }
+
+    public double getY2() {
+        return y2;
+    }
+
+    private void setY2(double y2) {
+        this.y2 = y2;
+    }
+
+    public double getX3() {
+        return x3;
+    }
+
+    private void setX3(double x3) {
+        this.x3 = x3;
+    }
+
+    public double getY3() {
+        return y3;
+    }
+
+    private void setY3(double y3) {
+        this.y3 = y3;
     }
 }

@@ -14,8 +14,8 @@ public class ShapeMain {
                 new Square(6),
                 new Square(7),
                 new Rectangle(7, 7),
-                new Rectangle(20, 20),
-                new Rectangle(10, 10),
+                new Rectangle(20, 15),
+                new Rectangle(10, 6),
                 new Circle(8),
                 new Circle(10),
                 new Circle(10),
@@ -58,6 +58,12 @@ public class ShapeMain {
                     break;
                 }
             }
+        }
+        System.out.println("Все фигуры: ");
+
+        for (ShapeInterface e : shapes) {
+            System.out.println(e);
+            System.out.println();
         }
     }
 }

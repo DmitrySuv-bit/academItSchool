@@ -2,8 +2,6 @@ package ru.academits.suvorov.shape;
 
 import ru.academits.suvorov.shape_interface.ShapeInterface;
 
-import java.util.Objects;
-
 public class Circle implements ShapeInterface {
     private double radius;
 
@@ -13,20 +11,30 @@ public class Circle implements ShapeInterface {
 
     @Override
     public String toString() {
-        return "Shape: Circle\n" + "radius = " + radius + "\nArea = " + getArea() + "\nPerimeter = " + getPerimeter();
+        return "Shape: Circle - " + "radius = " + radius + ", Area = " + getArea() + ", Perimeter = " + getPerimeter() + ", Width = " + getWidth() + ", Height = " + getHeight();
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Circle circle = (Circle) o;
-        return Double.compare(circle.radius, radius) == 0;
+
+        return circle.radius == radius;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(radius);
+        final int prime = 37;
+        int hash = 1;
+
+        hash = prime * hash + Double.hashCode(radius);
+
+        return hash;
     }
 
     @Override
@@ -47,5 +55,13 @@ public class Circle implements ShapeInterface {
     @Override
     public double getPerimeter() {
         return 2 * Math.PI * radius;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    private void setRadius(double radius) {
+        this.radius = radius;
     }
 }
