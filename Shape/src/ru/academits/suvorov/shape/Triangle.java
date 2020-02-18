@@ -21,7 +21,7 @@ public class Triangle implements ShapeInterface {
 
     @Override
     public String toString() {
-        return "Shape: Triangle - " + "vertex coordinates (x; y) : " + "(" + x1 + "; " + y1 + ")\t" + "(" + x2 + "; " + y2 + ")\t" + "(" + x3 + "; " + y3 + ")\t" + ", Area = " + getArea() + ", Perimeter = " + getPerimeter() + ", Width = " + getWidth() + ", Height = " + getHeight();
+        return "Shape: Triangle - " + "vertex coordinates (x; y) : " + "(" + x1 + "; " + y1 + ")\t" + "(" + x2 + "; " + y2 + ")\t" + "(" + x3 + "; " + y3 + ")" + ", Area = " + getArea() + ", Perimeter = " + getPerimeter() + ", Width = " + getWidth() + ", Height = " + getHeight();
     }
 
     @Override
