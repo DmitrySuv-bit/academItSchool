@@ -1,17 +1,25 @@
 package ru.academits.suvorov.shape;
 
-import ru.academits.suvorov.shape_interface.ShapeInterface;
+import ru.academits.suvorov.shape_interface.Shape;
 
-public class Square implements ShapeInterface {
+public class Square implements Shape {
     private double size;
 
     public Square(double size) {
         this.size = size;
     }
 
+    public double getSize() {
+        return size;
+    }
+
+    private void setSize(double size) {
+        this.size = size;
+    }
+
     @Override
     public String toString() {
-        return "Shape: Square - " + "Size = " + size + ", Area = " + getArea() + ", Perimeter = " + getPerimeter() + ", Width = " + getWidth() + ", Height = " + getHeight();
+        return "Shape: Square - Size = " + size + ", Area = " + getArea() + ", Perimeter = " + getPerimeter() + ", Width = " + getWidth() + ", Height = " + getHeight();
     }
 
     @Override
@@ -55,13 +63,5 @@ public class Square implements ShapeInterface {
     @Override
     public double getPerimeter() {
         return size * 4;
-    }
-
-    public double getSize() {
-        return size;
-    }
-
-    private void setSize(double size) {
-        this.size = size;
     }
 }

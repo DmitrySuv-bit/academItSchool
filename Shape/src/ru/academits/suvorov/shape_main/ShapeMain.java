@@ -2,29 +2,15 @@ package ru.academits.suvorov.shape_main;
 
 import ru.academits.suvorov.shape_comparator.AreaComparator;
 import ru.academits.suvorov.shape_comparator.PerimeterComparator;
-import ru.academits.suvorov.shape_interface.ShapeInterface;
+import ru.academits.suvorov.shape_interface.Shape;
 import ru.academits.suvorov.shape.*;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class ShapeMain {
-    public static void main(String[] args) {
-        ShapeInterface[] shapes = new ShapeInterface[]{
-                new Square(20),
-                new Square(6),
-                new Square(7),
-                new Rectangle(7, 7),
-                new Rectangle(20, 15),
-                new Rectangle(10, 6),
-                new Circle(8),
-                new Circle(10),
-                new Circle(10),
-                new Triangle(2, 2, 4, 6, 7, 3),
-                new Triangle(4, 3, 9, 6, 9, 3),
-                new Triangle(11, 2, 15, 5, 17, 2)
-        };
-
-        Arrays.sort(shapes, new AreaComparator());
+    public static void printShapesMaxArea(Shape[] shapes, Comparator<Shape> comparator) {
+        Arrays.sort(shapes, comparator);
 
         System.out.println("Фигуры с максимальной площадью: ");
         System.out.println();
@@ -37,8 +23,10 @@ public class ShapeMain {
                 break;
             }
         }
+    }
 
-        Arrays.sort(shapes, new PerimeterComparator());
+    public static void printShapesSecondPerimeter(Shape[] shapes, Comparator<Shape> comparator) {
+        Arrays.sort(shapes, comparator);
 
         System.out.println("Фигуры со вторым по величине периметром: ");
         System.out.println();
@@ -59,11 +47,37 @@ public class ShapeMain {
                 }
             }
         }
+    }
+
+    public static void printShapes(Shape[] shapes) {
         System.out.println("Все фигуры: ");
 
-        for (ShapeInterface e : shapes) {
+        for (Shape e : shapes) {
             System.out.println(e);
             System.out.println();
         }
+    }
+
+    public static void main(String[] args) {
+        Shape[] shapes = {
+                new Square(20),
+                new Square(20),
+                new Square(7),
+                new Rectangle(7, 7),
+                new Rectangle(20, 15),
+                new Rectangle(20, 15),
+                new Circle(8),
+                new Circle(10),
+                new Circle(10),
+                new Triangle(2, 2, 4, 6, 7, 3),
+                new Triangle(4, 3, 9, 6, 9, 3),
+                new Triangle(11, 2, 15, 5, 17, 2)
+        };
+
+        printShapesMaxArea(shapes, new AreaComparator());
+
+        printShapesSecondPerimeter(shapes, new PerimeterComparator());
+
+        printShapes(shapes);
     }
 }

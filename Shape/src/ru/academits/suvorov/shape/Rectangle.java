@@ -1,19 +1,35 @@
 package ru.academits.suvorov.shape;
 
-import ru.academits.suvorov.shape_interface.ShapeInterface;
+import ru.academits.suvorov.shape_interface.Shape;
 
-public class Rectangle implements ShapeInterface {
-    private double width;
-    private double height;
+public class Rectangle implements Shape {
+    private double rectangleWidth;
+    private double rectangleHeight;
 
     public Rectangle(double width, double height) {
-        this.width = width;
-        this.height = height;
+        this.rectangleWidth = width;
+        this.rectangleHeight = height;
+    }
+
+    private void setRectangleWidth(double rectangleWidth) {
+        this.rectangleWidth = rectangleWidth;
+    }
+
+    private void setRectangleHeight(double rectangleHeight) {
+        this.rectangleHeight = rectangleHeight;
+    }
+
+    public double getRectangleWidth() {
+        return rectangleWidth;
+    }
+
+    public double getRectangleHeight() {
+        return rectangleHeight;
     }
 
     @Override
     public String toString() {
-        return "Shape: Rectangle - " + "Width = " + width + ", Height = " + height + ", Area = " + getArea() + ", Perimeter = " + getPerimeter() + ", Width = " + getWidth() + ", Height = " + getHeight();
+        return "Shape: Rectangle - Width = " + rectangleWidth + ", Height = " + rectangleHeight + ", Area = " + getArea() + ", Perimeter = " + getPerimeter() + ", Width = " + getWidth() + ", Height = " + getHeight();
     }
 
     @Override
@@ -26,7 +42,7 @@ public class Rectangle implements ShapeInterface {
         }
         Rectangle rectangle = (Rectangle) o;
 
-        return rectangle.width == width && rectangle.height == height;
+        return rectangle.rectangleWidth == rectangleWidth && rectangle.rectangleHeight == rectangleHeight;
     }
 
     @Override
@@ -34,37 +50,29 @@ public class Rectangle implements ShapeInterface {
         final int prime = 37;
         int hash = 1;
 
-        hash = prime * hash + Double.hashCode(width);
-        hash = prime * hash + Double.hashCode(height);
+        hash = prime * hash + Double.hashCode(rectangleWidth);
+        hash = prime * hash + Double.hashCode(rectangleHeight);
 
         return hash;
     }
 
     @Override
     public double getWidth() {
-        return Math.max(width, height);
+        return rectangleWidth;
     }
 
     @Override
     public double getHeight() {
-        return Math.min(width, height);
+        return rectangleHeight;
     }
 
     @Override
     public double getArea() {
-        return width * height;
+        return rectangleWidth * rectangleHeight;
     }
 
     @Override
     public double getPerimeter() {
-        return (width + height) * 2;
-    }
-
-    private void setWidth(double width) {
-        this.width = width;
-    }
-
-    private void setHeight(double height) {
-        this.height = height;
+        return (rectangleWidth + rectangleHeight) * 2;
     }
 }

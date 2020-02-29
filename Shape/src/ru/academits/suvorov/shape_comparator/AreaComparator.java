@@ -1,12 +1,12 @@
 package ru.academits.suvorov.shape_comparator;
 
-import ru.academits.suvorov.shape_interface.ShapeInterface;
+import ru.academits.suvorov.shape_interface.Shape;
 
 import java.util.Comparator;
 
-public class AreaComparator implements Comparator<ShapeInterface> {
+public class AreaComparator implements Comparator<Shape> {
     @Override
-    public int compare(ShapeInterface o1, ShapeInterface o2) {
+    public int compare(Shape o1, Shape o2) {
         return Double.compare(o1.getArea(), o2.getArea());
     }
 }

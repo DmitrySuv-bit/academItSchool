@@ -1,6 +1,6 @@
 package ru.academits.suvorov.shape_interface;
 
-public interface ShapeInterface {
+public interface Shape {
     double getWidth();
 
     double getHeight();
