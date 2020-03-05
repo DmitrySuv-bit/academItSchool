@@ -69,8 +69,8 @@ public class Triangle implements Shape {
 
     @Override
     public String toString() {
-        return "Shape: Triangle - vertex coordinates (x; y) : (" + x1 + "; " + y1 + ")\t(" + x2 + "; " + y2 + ")\t" +
-                "(" + x3 + "; " + y3 + "), Area = " + getArea() + ", Perimeter = " + getPerimeter()
+        return "Shape: Triangle - vertex coordinates (x; y) : (" + x1 + "; " + y1 + ")\t(" + x2 + "; " + y2 + ")\t"
+                + "(" + x3 + "; " + y3 + "), Area = " + getArea() + ", Perimeter = " + getPerimeter()
                 + ", Width = " + getWidth() + ", Height = " + getHeight();
     }
 
