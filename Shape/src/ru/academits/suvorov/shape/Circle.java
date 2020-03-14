@@ -19,7 +19,8 @@ public class Circle implements Shape {
 
     @Override
     public String toString() {
-        return "Shape: Circle - radius = " + radius + ", Area = " + getArea() + ", Perimeter = " + getPerimeter() + ", Width = " + getWidth() + ", Height = " + getHeight();
+        return "Shape: Circle - radius = " + radius + ", Area = " + getArea() + ", Perimeter = " + getPerimeter()
+                + ", Width = " + getWidth() + ", Height = " + getHeight();
     }
 
     @Override
@@ -30,6 +31,7 @@ public class Circle implements Shape {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
+
         Circle circle = (Circle) o;
 
         return circle.radius == radius;

@@ -3,23 +3,24 @@ package ru.academits.suvorov.shape;
 import ru.academits.suvorov.shape_interface.Shape;
 
 public class Square implements Shape {
-    private double size;
+    private double sideLength;
 
-    public Square(double size) {
-        this.size = size;
+    public Square(double sideLength) {
+        this.sideLength = sideLength;
     }
 
-    public double getSize() {
-        return size;
+    public double getSideLength() {
+        return sideLength;
     }
 
-    private void setSize(double size) {
-        this.size = size;
+    private void setSideLength(double sideLength) {
+        this.sideLength = sideLength;
     }
 
     @Override
     public String toString() {
-        return "Shape: Square - Size = " + size + ", Area = " + getArea() + ", Perimeter = " + getPerimeter() + ", Width = " + getWidth() + ", Height = " + getHeight();
+        return "Shape: Square - Side length = " + sideLength + ", Area = " + getArea() + ", Perimeter = "
+                + getPerimeter() + ", Width = " + getWidth() + ", Height = " + getHeight();
     }
 
     @Override
@@ -30,9 +31,10 @@ public class Square implements Shape {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
+
         Square square = (Square) o;
 
-        return square.size == size;
+        return square.sideLength == sideLength;
     }
 
     @Override
@@ -40,28 +42,28 @@ public class Square implements Shape {
         final int prime = 37;
         int hash = 1;
 
-        hash = prime * hash + Double.hashCode(size);
+        hash = prime * hash + Double.hashCode(sideLength);
 
         return hash;
     }
 
     @Override
     public double getWidth() {
-        return size;
+        return sideLength;
     }
 
     @Override
     public double getHeight() {
-        return size;
+        return sideLength;
     }
 
     @Override
     public double getArea() {
-        return size * size;
+        return sideLength * sideLength;
     }
 
     @Override
     public double getPerimeter() {
-        return size * 4;
+        return sideLength * 4;
     }
 }

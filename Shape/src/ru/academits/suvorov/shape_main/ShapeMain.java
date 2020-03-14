@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class ShapeMain {
-    public static void printShapesMaxArea(Shape[] shapes, Comparator<Shape> comparator) {
+    public static void printShapesWithMaxArea(Shape[] shapes, Comparator<Shape> comparator) {
         Arrays.sort(shapes, comparator);
 
         System.out.println("Фигуры с максимальной площадью: ");
@@ -25,7 +25,7 @@ public class ShapeMain {
         }
     }
 
-    public static void printShapesSecondPerimeter(Shape[] shapes, Comparator<Shape> comparator) {
+    public static void printShapesWithSecondPerimeter(Shape[] shapes, Comparator<Shape> comparator) {
         Arrays.sort(shapes, comparator);
 
         System.out.println("Фигуры со вторым по величине периметром: ");
@@ -74,9 +74,9 @@ public class ShapeMain {
                 new Triangle(11, 2, 15, 5, 17, 2)
         };
 
-        printShapesMaxArea(shapes, new AreaComparator());
+        printShapesWithMaxArea(shapes, new AreaComparator());
 
-        printShapesSecondPerimeter(shapes, new PerimeterComparator());
+        printShapesWithSecondPerimeter(shapes, new PerimeterComparator());
 
         printShapes(shapes);
     }
