@@ -5,7 +5,7 @@ import ru.academits.suvorov.vector.Vector;
 public class VectorMain {
     public static void main(String[] args) {
         // Vector(n) – размерность n, все компоненты равны 0
-        Vector vector0 = new Vector(2);
+        Vector vector0 = new Vector(1);
 
         System.out.println("Вектор 0: " + vector0);
         System.out.println();
@@ -24,10 +24,11 @@ public class VectorMain {
         System.out.println("Вектор 2: " + vector2);
         System.out.println();
 
-        // Vector(n, double[]) – заполнение вектора значениями из массива. Если длина массива меньше n, то считать что в остальных компонентах 0
+        // Vector(n, double[]) – заполнение вектора значениями из массива.
+        // Если длина массива меньше n, то считать что в остальных компонентах 0
         double[] array1 = new double[]{3, 4, 5, 6, 7};
 
-        Vector vector3 = new Vector(6, array1);
+        Vector vector3 = new Vector(7, array1);
 
         System.out.println("Вектор 3: " + vector3);
         System.out.println();
@@ -38,11 +39,11 @@ public class VectorMain {
         System.out.println();
 
         // Сложение векторов
-        System.out.println("Сложение векторов 2 и 3: " + Vector.calculateAddition(vector2, vector3));
+        System.out.println("Сложение векторов 2 и 3: " + Vector.addition(vector2, vector3));
         System.out.println();
 
         // Вычитание векторов
-        System.out.println("Вычитание 3 векторов из 2: " + Vector.calculateSubtraction(vector2, vector3));
+        System.out.println("Вычитание 3 векторов из 2: " + Vector.subtraction(vector2, vector3));
         System.out.println();
 
         // Скалярное произведение векторов
@@ -52,7 +53,7 @@ public class VectorMain {
         // Сложение векторов (не статик)
         Vector vector4 = new Vector(vector2);
 
-        vector4.calculateAddition(vector3);
+        vector4.addition(vector3);
 
         System.out.println("Сложение векторов 2 и 3 (не статик): " + vector4);
         System.out.println();
@@ -60,7 +61,7 @@ public class VectorMain {
         // Вычитание векторов (не статик)
         Vector vector5 = new Vector(vector3);
 
-        vector5.calculateSubtraction(vector2);
+        vector5.subtraction(vector2);
 
         System.out.println("Вычитание 2 векторов из 3 (не статик): " + vector5);
         System.out.println();
@@ -68,7 +69,7 @@ public class VectorMain {
         // Умножение вектора на скаляр (не статик)
         Vector vector6 = new Vector(vector2);
 
-        vector6.calculateScalarMultiplication(5);
+        vector6.multiplyVectorByScalar(5);
 
         System.out.println("Умножение вектора 2 на скаляр (не статик): " + vector6);
         System.out.println();
@@ -76,7 +77,7 @@ public class VectorMain {
         // Разворот вектора (не статик)
         Vector vector7 = new Vector(vector3);
 
-        vector7.calculateReversal();
+        vector7.reversal();
 
         System.out.println("Разворот вектора 3 (не статик): " + vector7);
         System.out.println();
@@ -87,7 +88,7 @@ public class VectorMain {
         System.out.println();
 
         // Получение компоненты вектора по индексу
-        System.out.println("Получение компоненты вектора по индексу: " + vector3.getValue(3));
+        System.out.println("Получение компоненты вектора по индексу: " + vector3.getValue(6));
         System.out.println();
 
         // Установка компоненты вектора по индексу
