@@ -7,8 +7,8 @@ public class Vector {
 
     public Vector(int size) {
         if (size <= 0) {
-            throw new IllegalArgumentException("Переданое значение size = " + size + " неккоректно. " +
-                    "Размерность массива должна быть > 0");
+            throw new IllegalArgumentException("Переданное значение size = " + size + " некорректно. " +
+                    "Размерность вектора должна быть > 0");
         }
 
         components = new double[size];
@@ -20,7 +20,7 @@ public class Vector {
 
     public Vector(double[] array) {
         if (array.length == 0) {
-            throw new IllegalArgumentException("пустой массив");
+            throw new IllegalArgumentException("Размерность переданного массива некорректна, она должна быть > 0");
         }
 
         components = Arrays.copyOf(array, array.length);
@@ -28,8 +28,8 @@ public class Vector {
 
     public Vector(int size, double[] array) {
         if (size <= 0) {
-            throw new IllegalArgumentException("Переданое значение size = " + size + " неккоректно. " +
-                    "Размерность массива должна быть > 0");
+            throw new IllegalArgumentException("Переданное значение size = " + size + " некорректно. " +
+                    "Размерность вектора должна быть > 0");
         }
 
         components = Arrays.copyOf(array, size);
@@ -45,7 +45,7 @@ public class Vector {
             stringBuilder.append(v).append(", ");
         }
 
-        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length() - 1).append('}');
+        stringBuilder.deleteCharAt(stringBuilder.length() - 2).append('}');
 
         return stringBuilder.toString();
     }
@@ -80,19 +80,19 @@ public class Vector {
     }
 
     //Сложение векторов
-    public static Vector addition(Vector vector1, Vector vector2) {
+    public static Vector add(Vector vector1, Vector vector2) {
         Vector result = new Vector(vector1);
 
-        result.addition(vector2);
+        result.add(vector2);
 
         return result;
     }
 
     // Разность векторов
-    public static Vector subtraction(Vector vector1, Vector vector2) {
+    public static Vector subtract(Vector vector1, Vector vector2) {
         Vector result = new Vector(vector1);
 
-        result.subtraction(vector2);
+        result.subtract(vector2);
 
         return result;
     }
@@ -110,41 +110,37 @@ public class Vector {
     }
 
     // Сложение векторов (не статик)
-    public void addition(Vector vector) {
+    public void add(Vector vector) {
         if (components.length < vector.components.length) {
-            components = Arrays.copyOf(components, Math.max(components.length, vector.components.length));
+            components = Arrays.copyOf(components, vector.components.length);
         }
 
-        int minLength = Math.min(components.length, vector.components.length);
-
-        for (int i = 0; i < minLength; ++i) {
+        for (int i = 0; i < vector.components.length; ++i) {
             components[i] += vector.components[i];
         }
     }
 
     // Вычитание векторов (не статик)
-    public void subtraction(Vector vector) {
+    public void subtract(Vector vector) {
         if (components.length < vector.components.length) {
-            components = Arrays.copyOf(components, Math.max(components.length, vector.components.length));
+            components = Arrays.copyOf(components, vector.components.length);
         }
 
-        int minLength = Math.min(components.length, vector.components.length);
-
-        for (int i = 0; i < minLength; ++i) {
+        for (int i = 0; i < vector.components.length; ++i) {
             components[i] -= vector.components[i];
         }
     }
 
     // Умножение вектора на скаляр (не статик)
-    public void multiplyVectorByScalar(double scalar) {
+    public void multiplyByScalar(double scalar) {
         for (int i = 0; i < components.length; ++i) {
             components[i] *= scalar;
         }
     }
 
     // Разворот вектора  (не статик)
-    public void reversal() {
-        multiplyVectorByScalar(-1);
+    public void reverse() {
+        multiplyByScalar(-1);
     }
 
     // Длина вектора
@@ -159,20 +155,20 @@ public class Vector {
     }
 
     // Получение компоненты вектора по индексу
-    public double getValue(int index) {
+    public double getComponent(int index) {
         if (index >= components.length || index < 0) {
-            throw new IndexOutOfBoundsException("Переданое значение index = " + index + " неккоректно." +
-                    " Значение должно выполнять условие 0 <= index < " + components.length);
+            throw new IndexOutOfBoundsException("Переданное значение index = " + index + " некорректно." +
+                    " Для значения должно выполняться условие 0 <= index < " + components.length);
         }
 
         return components[index];
     }
 
     // Установка компоненты вектора по индексу
-    public void setValue(int index, double value) {
+    public void setComponent(int index, double value) {
         if (index >= components.length || index < 0) {
-            throw new IndexOutOfBoundsException("Переданое значение index = " + index + " неккоректно." +
-                    " Значение должно выполнять условие 0 <= index < " + components.length);
+            throw new IndexOutOfBoundsException("Переданное значение index = " + index + " некорректно." +
+                    " Для значения должно выполняться условие 0 <= index < " + components.length);
         }
 
         components[index] = value;
