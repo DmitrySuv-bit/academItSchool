@@ -3,12 +3,13 @@ package ru.academits.suvorov.array_list_home_main;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class ArrayListHomeMain {
-    public static void readFile(ArrayList<Integer> list, Scanner scanner) {
-        while (scanner.hasNextInt()) {
-            list.add(scanner.nextInt());
+    public static void readFile(ArrayList<String> list, Scanner scanner) {
+        while (scanner.hasNextLine()) {
+            list.add(scanner.nextLine());
         }
     }
 
@@ -32,20 +33,25 @@ public class ArrayListHomeMain {
         return newList;
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
-        ArrayList<Integer> list = new ArrayList<>();
+    public static void main(String[] args) {
+        ArrayList<String> stringsList = new ArrayList<>();
 
-        try (Scanner scanner = new Scanner(new FileInputStream("./ArrayListHome/numbers.txt"))) {
-            readFile(list, scanner);
+        try (Scanner scanner = new Scanner(new FileInputStream("./ArrayListHome/strings.txt"))) {
+            readFile(stringsList, scanner);
+
+            System.out.println("Чтение из файла и запись в Array List: " + stringsList);
+            System.out.println();
+        } catch (FileNotFoundException e) {
+            System.out.println("Файл не найден " + e);
+            System.out.println();
         }
 
-        System.out.println("Чтение из файла и запись в Array List: " + list);
+        ArrayList<Integer> numbersList = new ArrayList<>(Arrays.asList(1, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 9));
+
+        System.out.println("Удаление из списка повторяющихся чисел: " + repetitionRemoval(numbersList));
         System.out.println();
 
-        evenNumbersRemove(list);
-        System.out.println("Удаление из списка четных чисел: " + list);
-        System.out.println();
-
-        System.out.println("Удаление из списка повторяющихся чисел: " + repetitionRemoval(list));
+        evenNumbersRemove(numbersList);
+        System.out.println("Удаление из списка четных чисел: " + numbersList);
     }
 }
