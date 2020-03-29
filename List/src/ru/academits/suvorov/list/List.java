@@ -17,6 +17,10 @@ public class List<T> {
         this.listLength = 1;
     }
 
+    public ListItem<T> getHead() {
+        return head;
+    }
+
     @Override
     public String toString() {
         if (listLength == 0) {
@@ -38,26 +42,46 @@ public class List<T> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
         List<?> list = (List<?>) o;
+
         return listLength == list.listLength && Objects.equals(head, list.head);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(head, listLength);
+        final int prime = 37;
+        int hash = 1;
+
+        hash = prime * hash + listLength;
+        hash = prime * hash + (head != null ? head.hashCode() : 0);
+
+        return hash;
     }
 
+    // Получение размера списка
     public int getSize() {
         return listLength;
     }
 
-    public ListItem<T> getHead() {
-        return head;
+    // Получение значение первого элемента
+    public T getFirstElementValue() {
+        return head.getDate();
     }
 
-    public ListItem<T> getItem(int index) {
+    // Получение узла по индексу
+    public ListItem<T> getItemByIndex(int index) {
+        if (index >= listLength || index < 0) {
+            throw new IndexOutOfBoundsException("Переданное значение index = " + index + " некорректно."
+                    + " Для значения должно выполняться условие 0 <= index < " + listLength);
+        }
+
         int i = 0;
 
         for (ListItem<T> p = head; p != null; p = p.getNext()) {
@@ -71,12 +95,16 @@ public class List<T> {
         return null;
     }
 
+    // Получение значения по указанному индексу
     public T getValue(int index) {
-        return getItem(index).getDate();
+        //TODO Не знаю тут нужно кидать иключение, если проверка идет в методе ниже
+        return getItemByIndex(index).getDate();
     }
 
+    // Изменение значения по указанному индексу
     public T setValue(int index, T value) {
-        ListItem<T> p = getItem(index);
+        //TODO Не знаю тут нужно кидать иключение, если проверка идет в методе ниже
+        ListItem<T> p = getItemByIndex(index);
 
         T changedValue = p.getDate();
 
@@ -85,7 +113,8 @@ public class List<T> {
         return changedValue;
     }
 
-    public T remove() {
+    // Удаление первого элемента, пусть выдает значение элемента
+    public T removeHead() {
         T remoteValue = head.getDate();
 
         head = head.getNext();
@@ -95,13 +124,15 @@ public class List<T> {
         return remoteValue;
     }
 
+    // Удаление элемента по индексу, пусть выдает значение элемента
     public T removeByIndex(int index) {
-        T remoteValue = null;
+        //TODO Не знаю тут нужно кидать иключение, если проверка идет в методе ниже
+        T remoteValue = getItemByIndex(index).getDate();
 
         if (index == 0) {
-            remoteValue = remove();
+            remoteValue = removeHead();
         } else {
-            ListItem<T> p = getItem(index - 1);
+            ListItem<T> p = getItemByIndex(index - 1);
 
             p.setNext(p.getNext().getNext());
 
@@ -111,17 +142,22 @@ public class List<T> {
         return remoteValue;
     }
 
-    public void add(T date) {
+    // Вставка элемента в начало
+    public void addHead(T date) {
         head = new ListItem<>(date, head);
 
         ++listLength;
     }
 
+    // Вставка элемента по индексу
     public void addByIndex(int index, T date) {
-        if (index == 0) {
-            add(date);
+        if (index >= listLength || index < 0) {
+            throw new IndexOutOfBoundsException("Переданное значение index = " + index + " некорректно."
+                    + " Для значения должно выполняться условие 0 <= index < " + listLength);
+        } else if (index == 0) {
+            addHead(date);
         } else {
-            ListItem<T> p = getItem(index - 1);
+            ListItem<T> p = getItemByIndex(index - 1);
 
             p.setNext(new ListItem<>(date, p.getNext()));
 
@@ -129,9 +165,10 @@ public class List<T> {
         }
     }
 
+    // Удаление узла по значению, пусть выдает true, если элемент был удален
     public boolean isRemoveByIndex(T date) {
         if (Objects.equals(date, head.getDate())) {
-            remove();
+            removeHead();
 
             return true;
         }
@@ -149,6 +186,7 @@ public class List<T> {
         return false;
     }
 
+    // Разворот списка за линейное время
     public void reverse() {
         if (head != null) {
             ListItem<T> p = head;
@@ -167,9 +205,9 @@ public class List<T> {
         }
     }
 
-    public void addNext(T date, ListItem<T> listItem ) {
-        if (listItem == null){
-            add(date);
+    public void addNext(T date, ListItem<T> listItem) {
+        if (listItem == null) {
+            addHead(date);
         } else {
             listItem.setNext(new ListItem<>(date, listItem.getNext()));
 
@@ -177,6 +215,7 @@ public class List<T> {
         }
     }
 
+    // Копирование списка
     public List<T> copy() {
         if (head == null) {
             return new List<>();
@@ -184,12 +223,8 @@ public class List<T> {
 
         List<T> listCopy = new List<>(new ListItem<>(head.getDate(), null));
 
-        ListItem<T> h = listCopy.getHead();
-
-        for (ListItem<T> p = head.getNext(); p != null; p = p.getNext()) {
-            listCopy.addNext( p.getDate(),h);
-
-            h = h.getNext();
+        for (ListItem<T> p = head.getNext(), h = listCopy.getHead(); p != null; p = p.getNext(), h = h.getNext()) {
+            listCopy.addNext(p.getDate(), h);
         }
 
         return listCopy;

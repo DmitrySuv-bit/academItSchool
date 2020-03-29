@@ -6,6 +6,7 @@ public class ListItem<T> {
 
     public ListItem(T date) {
         this.date = date;
+        this.next = null;
     }
 
     public ListItem(T date, ListItem<T> next) {
@@ -31,6 +32,10 @@ public class ListItem<T> {
 
     @Override
     public String toString() {
+        if (date == null) {
+            return null;
+        }
+
         return date.toString();
     }
 }
