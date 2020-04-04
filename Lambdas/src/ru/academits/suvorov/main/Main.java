@@ -69,9 +69,9 @@ public class Main {
 
         int fibonacciNumbersCount = scanner.nextInt();
 
-        List<Integer> Fibonacci = Stream.iterate(new int[]{0, 1}, x -> new int[]{x[1], x[0] + x[1]})
-                .limit(fibonacciNumbersCount).map(x -> x[0]).collect(Collectors.toList());
+        List<Integer> fibonacciNumbers = Stream.iterate(new int[]{0, 1}, f -> new int[]{f[1], f[0] + f[1]})
+                .limit(fibonacciNumbersCount).map(f -> f[0]).collect(Collectors.toList());
 
-        Fibonacci.forEach(System.out::println);
+        fibonacciNumbers.forEach(System.out::println);
     }
 }
