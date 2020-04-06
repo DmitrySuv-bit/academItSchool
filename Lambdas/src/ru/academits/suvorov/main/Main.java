@@ -24,17 +24,26 @@ public class Main {
         personsList.add(new Person("Татьяна", 21));
         personsList.add(new Person("Екатерина", 25));
 
-        List<String> uniqueNames = personsList.stream().map(Person::getName).distinct().collect(Collectors.toList());
-
-        System.out.println("Список уникальных имен: " + String.join(", ", uniqueNames));
-        System.out.println();
-
-        List<String> peopleUnder18 = personsList.stream().filter(age -> age.getAge() < 18).map(Person::getName)
+        List<String> uniqueNames = personsList.stream()
+                .map(Person::getName)
+                .distinct()
                 .collect(Collectors.toList());
 
+        //noinspection SimplifyStreamApiCallChains
+        System.out.println("Список уникальных имен: " + uniqueNames.stream().collect(Collectors.joining(", ")));
+        System.out.println();
+
+        List<String> peopleUnder18 = personsList.stream()
+                .filter(age -> age.getAge() < 18)
+                .map(Person::getName)
+                .collect(Collectors.toList());
+
+        Double personsMiddleAge = personsList.stream()
+                .filter(age -> age.getAge() < 18)
+                .collect(Collectors.averagingDouble(Person::getAge));
+
         System.out.println("Список людей младше 18: " + String.join(", ", peopleUnder18)
-                + ", их средний возраст: " + personsList.stream().filter(age -> age.getAge() < 18)
-                .collect(Collectors.averagingDouble(Person::getAge)));
+                + ", их средний возраст: " + personsMiddleAge);
         System.out.println();
 
         Map<String, Double> personsByMiddleAge = personsList.stream()
@@ -59,7 +68,9 @@ public class Main {
 
         int elementsCount = scanner.nextInt();
 
-        DoubleStream squares = DoubleStream.iterate(0, x -> x + 1).map(Math::sqrt).limit(elementsCount);
+        DoubleStream squares = DoubleStream.iterate(0, x -> x + 1)
+                .map(Math::sqrt)
+                .limit(elementsCount);
 
         squares.forEach(System.out::println);
         System.out.println();
@@ -70,7 +81,8 @@ public class Main {
         int fibonacciNumbersCount = scanner.nextInt();
 
         List<Integer> fibonacciNumbers = Stream.iterate(new int[]{0, 1}, f -> new int[]{f[1], f[0] + f[1]})
-                .limit(fibonacciNumbersCount).map(f -> f[0]).collect(Collectors.toList());
+                .limit(fibonacciNumbersCount)
+                .map(f -> f[0]).collect(Collectors.toList());
 
         fibonacciNumbers.forEach(System.out::println);
     }
