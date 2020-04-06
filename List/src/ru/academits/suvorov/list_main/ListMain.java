@@ -9,16 +9,16 @@ public class ListMain {
         System.out.println(list);
         System.out.println("-----------------------------------------------------------------------------------------");
 
-        list.addHead(10);
-        list.addHead(9);
-        list.addHead(8);
-        list.addHead(7);
-        list.addHead(6);
-        list.addHead(5);
-        list.addHead(4);
-        list.addHead(3);
-        list.addHead(2);
-        list.addHead(1);
+        list.addFirst(10);
+        list.addFirst(9);
+        list.addFirst(8);
+        list.addFirst(7);
+        list.addFirst(6);
+        list.addFirst(5);
+        list.addFirst(4);
+        list.addFirst(3);
+        list.addFirst(2);
+        list.addFirst(1);
 
         System.out.println("My list: " + list);
         System.out.println("-----------------------------------------------------------------------------------------");
@@ -40,20 +40,19 @@ public class ListMain {
         System.out.println("Размер списка: " + list.getSize());
         System.out.println("-----------------------------------------------------------------------------------------");
 
-
-        System.out.println("Значение первого элемента: " + list.getFirstElementValue());
+        System.out.println("Значение первого элемента: " + list.getFirstElementData());
         System.out.println("-----------------------------------------------------------------------------------------");
 
-        int index1 = 1;
+        int index1 = 0;
 
-        System.out.println("Получение значения по указанному индексу = " + index1 + ": " + list.getValue(index1));
+        System.out.println("Получение значения по указанному индексу = " + index1 + ": " + list.getData(index1));
         System.out.println("-----------------------------------------------------------------------------------------");
 
-        int index2 = 5;
+        int index2 = 0;
         Integer value = 150;
 
         System.out.println("Изменение значения по указанному индексу = " + index2 + ": Значение = "
-                + list3.setValue(index2, value) + " изменено на значение = " + value);
+                + list3.setData(index2, value) + " изменено на значение = " + value);
         System.out.println();
 
         System.out.println("Список после изменения значения: " + list3);
@@ -68,7 +67,8 @@ public class ListMain {
         System.out.println("Список после удаления элемента: " + list4);
         System.out.println("-----------------------------------------------------------------------------------------");
 
-        int index4 = 2;
+        System.out.println(list5);
+        int index4 = 10;
         Integer value1 = 300;
 
         list5.addByIndex(index4, value1);
@@ -80,7 +80,7 @@ public class ListMain {
         System.out.println("-----------------------------------------------------------------------------------------");
 
         Integer value2 = 3;
-        boolean isRemove = list6.isRemoveByIndex(value2);
+        boolean isRemove = list6.removeByData(value2);
 
         System.out.println("Удаление узла по значению = " + value2 + ": " + isRemove);
         System.out.println();
@@ -89,5 +89,33 @@ public class ListMain {
             System.out.println("Список после удаления узла: " + list6);
         }
         System.out.println("-----------------------------------------------------------------------------------------");
+        System.out.println(list.hashCode());
+        System.out.println(list1.hashCode());
+
+        System.out.println(list);
+
+        System.out.println(list1);
+
+        System.out.println(list.equals(list1));
+        System.out.println();
+
+        System.out.println(list.hashCode());
+        System.out.println(list3.hashCode());
+
+        System.out.println(list);
+
+        System.out.println(list3);
+
+        System.out.println(list.equals(list3));
+        System.out.println();
+
+        System.out.println(list5.hashCode());
+        System.out.println(list3.hashCode());
+
+        System.out.println(list5);
+
+        System.out.println(list3);
+
+        System.out.println(list5.equals(list3));
     }
 }

@@ -1,30 +1,25 @@
 package ru.academits.suvorov.list;
 
-import ru.academits.suvorov.list_item.ListItem;
-
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class List<T> {
     private ListItem<T> head;
-    private int listLength;
+    private int length;
 
     public List() {
-        listLength = 0;
+        length = 0;
     }
 
-    public List(ListItem<T> head) {
-        this.head = head;
-        this.listLength = 1;
-    }
-
-    public ListItem<T> getHead() {
-        return head;
+    public List(ListItem<T> data) {
+        head = data;
+        length = 1;
     }
 
     @Override
     public String toString() {
-        if (listLength == 0) {
-            return "Список пуст";
+        if (length == 0) {
+            return "{ }";
         }
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -32,7 +27,7 @@ public class List<T> {
         stringBuilder.append("{ ");
 
         for (ListItem<T> p = head; p != null; p = p.getNext()) {
-            stringBuilder.append(p.toString()).append(", ");
+            stringBuilder.append(p).append(", ");
         }
 
         stringBuilder.deleteCharAt(stringBuilder.length() - 2).append("}");
@@ -51,7 +46,8 @@ public class List<T> {
 
         List<?> list = (List<?>) o;
 
-        return listLength == list.listLength && Objects.equals(head, list.head);
+        return length == list.length && Objects.equals(head.getData(), list.head.getData())
+                && Objects.equals(head.getNext(), list.head.getNext());
     }
 
     @Override
@@ -59,125 +55,136 @@ public class List<T> {
         final int prime = 37;
         int hash = 1;
 
-        hash = prime * hash + listLength;
-        hash = prime * hash + (head != null ? head.hashCode() : 0);
+        hash = prime * hash + length;
+
+        for (ListItem<T> p = head; p != null; p = p.getNext()) {
+            hash = prime * hash + (head.getNext() != null ? head.getNext().hashCode() : 0);
+            hash = prime * hash + (int) head.getData();
+        }
 
         return hash;
     }
 
     // Получение размера списка
     public int getSize() {
-        return listLength;
+        return length;
     }
 
     // Получение значение первого элемента
-    public T getFirstElementValue() {
-        return head.getDate();
+    public T getFirstElementData() {
+        if (length == 0) {
+            throw new NoSuchElementException("Получить значение первого элемента невозможно, " +
+                    "количество элементов в списке = 0");
+        }
+
+        return head.getData();
     }
 
-    // Получение узла по индексу
-    public ListItem<T> getItemByIndex(int index) {
-        if (index >= listLength || index < 0) {
+    private ListItem<T> getItemByIndex(int index) {
+        if (index >= length || index < 0) {
             throw new IndexOutOfBoundsException("Переданное значение index = " + index + " некорректно."
-                    + " Для значения должно выполняться условие 0 <= index < " + listLength);
+                    + " Для значения должно выполняться условие 0 <= index < " + length);
         }
 
-        int i = 0;
+        ListItem<T> p = head;
 
-        for (ListItem<T> p = head; p != null; p = p.getNext()) {
-            if (i == index) {
-                return p;
-            }
-
-            ++i;
+        for (int i = 0; i != index; ++i) {
+            p = p.getNext();
         }
 
-        return null;
+        return p;
     }
 
-    // Получение значения по указанному индексу
-    public T getValue(int index) {
-        //TODO Не знаю тут нужно кидать иключение, если проверка идет в методе ниже
-        return getItemByIndex(index).getDate();
+    // Получение значения по указанному индексу------------------------------
+    public T getData(int index) {
+        return getItemByIndex(index).getData();
     }
 
-    // Изменение значения по указанному индексу
-    public T setValue(int index, T value) {
-        //TODO Не знаю тут нужно кидать иключение, если проверка идет в методе ниже
+    // Изменение значения по указанному индексу-----------------------
+    public T setData(int index, T data) {
         ListItem<T> p = getItemByIndex(index);
 
-        T changedValue = p.getDate();
+        T changedData = p.getData();
 
-        p.setDate(value);
+        p.setData(data);
 
-        return changedValue;
+        return changedData;
     }
 
     // Удаление первого элемента, пусть выдает значение элемента
-    public T removeHead() {
-        T remoteValue = head.getDate();
+    public T removeFirst() {
+        if (length == 0) {
+            throw new NoSuchElementException("Удаление невозможно, количество элементов в списке = 0");
+        }
+
+        T remoteData = head.getData();
 
         head = head.getNext();
 
-        --listLength;
+        --length;
 
-        return remoteValue;
+        return remoteData;
     }
 
-    // Удаление элемента по индексу, пусть выдает значение элемента
+    // Удаление элемента по индексу, пусть выдает значение элемента---------------------------
     public T removeByIndex(int index) {
-        //TODO Не знаю тут нужно кидать иключение, если проверка идет в методе ниже
-        T remoteValue = getItemByIndex(index).getDate();
-
-        if (index == 0) {
-            remoteValue = removeHead();
-        } else {
+        if (index != 0) {
             ListItem<T> p = getItemByIndex(index - 1);
+
+            T remoteData = p.getNext().getData();
 
             p.setNext(p.getNext().getNext());
 
-            --listLength;
+            --length;
+
+            return remoteData;
         }
 
-        return remoteValue;
+        return removeFirst();
     }
 
     // Вставка элемента в начало
-    public void addHead(T date) {
-        head = new ListItem<>(date, head);
+    public void addFirst(T data) {
+        head = new ListItem<>(data, head);
 
-        ++listLength;
+        ++length;
     }
 
     // Вставка элемента по индексу
-    public void addByIndex(int index, T date) {
-        if (index >= listLength || index < 0) {
+    public void addByIndex(int index, T data) {
+        if (index >= length + 1 || index < 0) {
             throw new IndexOutOfBoundsException("Переданное значение index = " + index + " некорректно."
-                    + " Для значения должно выполняться условие 0 <= index < " + listLength);
-        } else if (index == 0) {
-            addHead(date);
+                    + " Для значения должно выполняться условие 0 <= index <= " + length);
+        }
+
+        if (index == 0) {
+            addFirst(data);
         } else {
             ListItem<T> p = getItemByIndex(index - 1);
 
-            p.setNext(new ListItem<>(date, p.getNext()));
+            p.setNext(new ListItem<>(data, p.getNext()));
 
-            ++listLength;
+            ++length;
         }
     }
 
     // Удаление узла по значению, пусть выдает true, если элемент был удален
-    public boolean isRemoveByIndex(T date) {
-        if (Objects.equals(date, head.getDate())) {
-            removeHead();
+    public boolean removeByData(T data) {
+        if (length == 0) {
+            throw new NoSuchElementException("Удаление по значению невозможно, количество элементов в списке = 0");
+        }
+
+        if (Objects.equals(data, head.getData())) {
+            removeFirst();
 
             return true;
         }
 
         for (ListItem<T> p = head; p.getNext() != null; p = p.getNext()) {
-            if (Objects.equals(date, p.getNext().getDate())) {
+            if (Objects.equals(data, p.getNext().getData())) {
                 p.setNext(p.getNext().getNext());
 
-                --listLength;
+                --length;
 
                 return true;
             }
@@ -188,31 +195,23 @@ public class List<T> {
 
     // Разворот списка за линейное время
     public void reverse() {
-        if (head != null) {
-            ListItem<T> p = head;
-            ListItem<T> q = head.getNext();
-
-            p.setNext(null);
-
-            while (q != null) {
-                ListItem<T> h = q;
-                q = h.getNext();
-                h.setNext(p);
-                p = h;
-            }
-
-            head = p;
+        if (head == null) {
+            return;
         }
-    }
 
-    public void addNext(T date, ListItem<T> listItem) {
-        if (listItem == null) {
-            addHead(date);
-        } else {
-            listItem.setNext(new ListItem<>(date, listItem.getNext()));
+        ListItem<T> p = head;
+        ListItem<T> q = head.getNext();
 
-            ++listLength;
+        p.setNext(null);
+
+        while (q != null) {
+            ListItem<T> h = q;
+            q = h.getNext();
+            h.setNext(p);
+            p = h;
         }
+
+        head = p;
     }
 
     // Копирование списка
@@ -221,10 +220,12 @@ public class List<T> {
             return new List<>();
         }
 
-        List<T> listCopy = new List<>(new ListItem<>(head.getDate(), null));
+        List<T> listCopy = new List<>(new ListItem<>(head.getData(), null));
 
-        for (ListItem<T> p = head.getNext(), h = listCopy.getHead(); p != null; p = p.getNext(), h = h.getNext()) {
-            listCopy.addNext(p.getDate(), h);
+        listCopy.length = this.length;
+
+        for (ListItem<T> copyListItem = head.getNext(), prevListItem = listCopy.head; copyListItem != null; copyListItem = copyListItem.getNext(), prevListItem = prevListItem.getNext()) {
+            prevListItem.setNext(new ListItem<>(copyListItem.getData(), prevListItem.getNext()));
         }
 
         return listCopy;
