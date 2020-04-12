@@ -34,7 +34,8 @@ public class Matrix {
 
     public Matrix(double[][] array) {
         if (array.length <= 0) {
-            throw new IllegalArgumentException("Количество строк переданого массива = " + array.length + " некорректно, она должна быть > 0");
+            throw new IllegalArgumentException("Количество строк переданого массива = " + array.length
+                    + " некорректно, она должна быть > 0");
         }
 
         int max = 0;
@@ -44,7 +45,8 @@ public class Matrix {
         }
 
         if (max <= 0) {
-            throw new IllegalArgumentException("Количество столбцов переданого массива = " + max + " некорректно, она должна быть > 0");
+            throw new IllegalArgumentException("Количество столбцов переданого массива = " + max
+                    + " некорректно, она должна быть > 0");
         }
 
         this.vectorsArray = new Vector[array.length];
@@ -56,7 +58,8 @@ public class Matrix {
 
     public Matrix(Vector[] vectors) {
         if (vectors.length <= 0) {
-            throw new IllegalArgumentException("Количество векторов-строк в массиве = " + vectors.length + " некорректно, она должна быть > 0");
+            throw new IllegalArgumentException("Количество векторов-строк в массиве = " + vectors.length
+                    + " некорректно, она должна быть > 0");
         }
         int max = 0;
 
@@ -65,7 +68,8 @@ public class Matrix {
         }
 
         if (max <= 0) {
-            throw new IllegalArgumentException("Максимальное количество элементов в векторе-строк = " + max + " некорректно, она должна быть > 0");
+            throw new IllegalArgumentException("Максимальное количество элементов в векторе-строк = " + max
+                    + " некорректно, она должна быть > 0");
         }
 
         this.vectorsArray = new Vector[vectors.length];
@@ -183,7 +187,8 @@ public class Matrix {
             return vectorsArray[0].getComponent(0);
         }
         if (getRowsCount() == 2) {
-            return vectorsArray[0].getComponent(0) * vectorsArray[1].getComponent(1) - vectorsArray[1].getComponent(0) * vectorsArray[0].getComponent(1);
+            return vectorsArray[0].getComponent(0) * vectorsArray[1].getComponent(1)
+                    - vectorsArray[1].getComponent(0) * vectorsArray[0].getComponent(1);
         }
 
         double determinant = 0;
