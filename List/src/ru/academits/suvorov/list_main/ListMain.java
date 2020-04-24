@@ -58,7 +58,7 @@ public class ListMain {
         System.out.println("Список после изменения значения: " + list3);
         System.out.println("-----------------------------------------------------------------------------------------");
 
-        int index3 = 8;
+        int index3 = 5;
 
         System.out.println("Удаление элемента по индексу = " + index3 + ": Значение = " + list4.removeByIndex(index3)
                 + " удалено");
@@ -79,7 +79,7 @@ public class ListMain {
         System.out.println("Список после добавления значения: " + list5);
         System.out.println("-----------------------------------------------------------------------------------------");
 
-        Integer value2 = 3;
+        Integer value2 = 1;
         boolean isRemove = list6.removeByData(value2);
 
         System.out.println("Удаление узла по значению = " + value2 + ": " + isRemove);
@@ -89,33 +89,5 @@ public class ListMain {
             System.out.println("Список после удаления узла: " + list6);
         }
         System.out.println("-----------------------------------------------------------------------------------------");
-        System.out.println(list.hashCode());
-        System.out.println(list1.hashCode());
-
-        System.out.println(list);
-
-        System.out.println(list1);
-
-        System.out.println(list.equals(list1));
-        System.out.println();
-
-        System.out.println(list.hashCode());
-        System.out.println(list3.hashCode());
-
-        System.out.println(list);
-
-        System.out.println(list3);
-
-        System.out.println(list.equals(list3));
-        System.out.println();
-
-        System.out.println(list5.hashCode());
-        System.out.println(list3.hashCode());
-
-        System.out.println(list5);
-
-        System.out.println(list3);
-
-        System.out.println(list5.equals(list3));
     }
 }

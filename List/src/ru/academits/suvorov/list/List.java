@@ -11,20 +11,20 @@ public class List<T> {
         length = 0;
     }
 
-    public List(ListItem<T> data) {
-        head = data;
+    public List(T data) {
+        head = new ListItem<>(data);
         length = 1;
     }
 
     @Override
     public String toString() {
         if (length == 0) {
-            return "{ }";
+            return "{}";
         }
 
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append("{ ");
+        stringBuilder.append("{");
 
         for (ListItem<T> p = head; p != null; p = p.getNext()) {
             stringBuilder.append(p).append(", ");
@@ -33,36 +33,6 @@ public class List<T> {
         stringBuilder.deleteCharAt(stringBuilder.length() - 2).append("}");
 
         return stringBuilder.toString();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        List<?> list = (List<?>) o;
-
-        return length == list.length && Objects.equals(head.getData(), list.head.getData())
-                && Objects.equals(head.getNext(), list.head.getNext());
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 37;
-        int hash = 1;
-
-        hash = prime * hash + length;
-
-        for (ListItem<T> p = head; p != null; p = p.getNext()) {
-            hash = prime * hash + (head.getNext() != null ? head.getNext().hashCode() : 0);
-            hash = prime * hash + (int) head.getData();
-        }
-
-        return hash;
     }
 
     // Получение размера списка
@@ -128,19 +98,24 @@ public class List<T> {
 
     // Удаление элемента по индексу, пусть выдает значение элемента---------------------------
     public T removeByIndex(int index) {
-        if (index != 0) {
-            ListItem<T> p = getItemByIndex(index - 1);
-
-            T remoteData = p.getNext().getData();
-
-            p.setNext(p.getNext().getNext());
-
-            --length;
-
-            return remoteData;
+        if (index >= length || index < 0) {
+            throw new IndexOutOfBoundsException("Переданное значение index = " + index + " некорректно."
+                    + " Для значения должно выполняться условие 0 <= index < " + length);
         }
 
-        return removeFirst();
+        if (index == 0) {
+            return removeFirst();
+        }
+
+        ListItem<T> p = getItemByIndex(index - 1);
+
+        T oldData = p.getNext().getData();
+
+        p.setNext(p.getNext().getNext());
+
+        --length;
+
+        return oldData;
     }
 
     // Вставка элемента в начало
@@ -152,28 +127,25 @@ public class List<T> {
 
     // Вставка элемента по индексу
     public void addByIndex(int index, T data) {
-        if (index >= length + 1 || index < 0) {
+        if (index > length || index < 0) {
             throw new IndexOutOfBoundsException("Переданное значение index = " + index + " некорректно."
                     + " Для значения должно выполняться условие 0 <= index <= " + length);
         }
 
         if (index == 0) {
             addFirst(data);
-        } else {
-            ListItem<T> p = getItemByIndex(index - 1);
-
-            p.setNext(new ListItem<>(data, p.getNext()));
-
-            ++length;
+            return;
         }
+
+        ListItem<T> p = getItemByIndex(index - 1);
+
+        p.setNext(new ListItem<>(data, p.getNext()));
+
+        ++length;
     }
 
     // Удаление узла по значению, пусть выдает true, если элемент был удален
     public boolean removeByData(T data) {
-        if (length == 0) {
-            throw new NoSuchElementException("Удаление по значению невозможно, количество элементов в списке = 0");
-        }
-
         if (Objects.equals(data, head.getData())) {
             removeFirst();
 
@@ -199,19 +171,19 @@ public class List<T> {
             return;
         }
 
-        ListItem<T> p = head;
-        ListItem<T> q = head.getNext();
+        ListItem<T> currentListItem = head;
+        ListItem<T> nextListItem = head.getNext();
 
-        p.setNext(null);
+        currentListItem.setNext(null);
 
-        while (q != null) {
-            ListItem<T> h = q;
-            q = h.getNext();
-            h.setNext(p);
-            p = h;
+        while (nextListItem != null) {
+            ListItem<T> previousListItem = nextListItem;
+            nextListItem = previousListItem.getNext();
+            previousListItem.setNext(currentListItem);
+            currentListItem = previousListItem;
         }
 
-        head = p;
+        head = currentListItem;
     }
 
     // Копирование списка
@@ -220,12 +192,13 @@ public class List<T> {
             return new List<>();
         }
 
-        List<T> listCopy = new List<>(new ListItem<>(head.getData(), null));
+        List<T> listCopy = new List<>(head.getData());
 
         listCopy.length = this.length;
 
-        for (ListItem<T> copyListItem = head.getNext(), prevListItem = listCopy.head; copyListItem != null; copyListItem = copyListItem.getNext(), prevListItem = prevListItem.getNext()) {
-            prevListItem.setNext(new ListItem<>(copyListItem.getData(), prevListItem.getNext()));
+        for (ListItem<T> initialListItem = head.getNext(), newListItem = listCopy.head; initialListItem != null;
+             initialListItem = initialListItem.getNext(), newListItem = newListItem.getNext()) {
+            newListItem.setNext(new ListItem<>(initialListItem.getData(), newListItem.getNext()));
         }
 
         return listCopy;
