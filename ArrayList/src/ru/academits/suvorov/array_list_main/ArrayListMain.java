@@ -24,7 +24,8 @@ public class ArrayListMain {
         arrayList2.add(6);
         arrayList2.add(2);
         arrayList2.add(6, 7);
-        arrayList2.add(5, 9);
+        arrayList2.add(8, 10);
+        System.out.println(arrayList2);
 
         System.out.println("arrayList2 с заданной вместимостью с добавлением указанного элемента в конец списка: ");
         System.out.println(arrayList2);
@@ -53,7 +54,7 @@ public class ArrayListMain {
         System.out.println("-----------------------------------------------------------------------------------------");
 
         //Удаляет элемент в указанной позиции в этом списке
-        System.out.println("Значение удаленного элемента: " + arrayList2.remove(5));
+        System.out.println("Значение удаленного элемента: " + arrayList2.remove(7));
 
         System.out.println("Список после удаления: " + arrayList2);
         System.out.println("-----------------------------------------------------------------------------------------");
@@ -77,7 +78,7 @@ public class ArrayListMain {
         System.out.println("-----------------------------------------------------------------------------------------");
 
         // Возвращает элемент в указанной позиции в этом списке
-        System.out.println("Значение элемента по индексу: " + arrayList2.get(0));
+        System.out.println("Значение элемента по индексу: " + arrayList2.get(7));
         System.out.println("-----------------------------------------------------------------------------------------");
 
         // Сохраняет только элементы в этом списке, которые содержатся в указанной коллекции
@@ -91,7 +92,7 @@ public class ArrayListMain {
         System.out.println("-----------------------------------------------------------------------------------------");
 
         // Вставляет все элементы из указанной коллекции в этот список, начиная с указанной позиции
-        arrayList2.addAll(1, arrayList1);
+        arrayList2.addAll(3, arrayList1);
 
         System.out.println("Вставка всех элементов из указанной коллекции: " + arrayList2);
         System.out.println("-----------------------------------------------------------------------------------------");
@@ -104,7 +105,7 @@ public class ArrayListMain {
         System.out.println("-----------------------------------------------------------------------------------------");
 
         //Возвращает true, если этот список содержит элемент из указаной коллекции
-        System.out.println("Возвращает true, если arrayList2 содержит элемент из коллекции arrayList1: "
+        System.out.println("Возвращает true, если arrayList2 содержит все элементы из коллекции arrayList1: "
                 + arrayList2.containsAll(arrayList1));
         System.out.println("-----------------------------------------------------------------------------------------");
 

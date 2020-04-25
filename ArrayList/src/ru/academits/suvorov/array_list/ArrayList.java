@@ -19,29 +19,25 @@ public class ArrayList<T> implements List<T> {
 
         //noinspection unchecked
         items = (T[]) new Object[capacity];
-        listLength = 0;
     }
 
     private class MyListIterator implements Iterator<T> {
         private int currentIndex = -1;
-        private int initialModCount = modCount;
+        private final int initialModCount = modCount;
 
         @Override
         public boolean hasNext() {
-            if (initialModCount != modCount) {
-                throw new ConcurrentModificationException();
-            }
-
             return currentIndex + 1 < listLength;
         }
 
         @Override
         public T next() {
             if (initialModCount != modCount) {
-                throw new ConcurrentModificationException();
+                throw new ConcurrentModificationException("Попытка модифицировать коллекцию " +
+                        "во время итерирования по ней");
             }
-            if (currentIndex + 1 > listLength) {
-                throw new NoSuchElementException();
+            if (!hasNext()) {
+                throw new NoSuchElementException("В текущем коллекции больше нет элементов");
             }
 
             ++currentIndex;
@@ -54,7 +50,7 @@ public class ArrayList<T> implements List<T> {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append("{ ");
+        stringBuilder.append("{");
 
         for (int i = 0; i < listLength; ++i) {
             stringBuilder.append(items[i]).append(", ");
@@ -78,8 +74,7 @@ public class ArrayList<T> implements List<T> {
 
         ArrayList<?> arrayList = (ArrayList<?>) o;
 
-        return listLength == arrayList.listLength && modCount == arrayList.modCount
-                && Arrays.equals(items, arrayList.items);
+        return listLength == arrayList.listLength && Arrays.equals(items, arrayList.items);
     }
 
     @Override
@@ -89,13 +84,12 @@ public class ArrayList<T> implements List<T> {
 
         hash = hash * prime + Arrays.hashCode(items);
         hash = hash * prime + listLength;
-        hash = hash * prime + modCount;
 
         return hash;
     }
 
     // Увеличивает емкость этого ArrayList.
-    private void ensureCapacity(int capacity) {
+    public void ensureCapacity(int capacity) {
         if (items.length < capacity) {
             items = Arrays.copyOf(items, capacity);
         }
@@ -123,7 +117,7 @@ public class ArrayList<T> implements List<T> {
     // Возвращает true, если этот список содержит указанный элемент.
     @Override
     public boolean contains(Object o) {
-        return this.indexOf(o) != -1;
+        return indexOf(o) != -1;
     }
 
     // Возвращает итератор для элементов в этом списке в правильной последовательности.
@@ -167,15 +161,13 @@ public class ArrayList<T> implements List<T> {
     // Удаляет первое вхождение указанного элемента из этого списка, если он присутствует.
     @Override
     public boolean remove(Object o) {
-        for (int i = 0; i < listLength; ++i) {
-            if (Objects.equals(o, items[i])) {
-                remove(i);
-
-                return true;
-            }
+        if (indexOf(o) == -1) {
+            return false;
         }
 
-        return false;
+        remove(indexOf(o));
+
+        return true;
     }
 
     //Возвращает true, если этот список содержит элемент из указаной коллекции.
@@ -200,10 +192,8 @@ public class ArrayList<T> implements List<T> {
     // Вставляет все элементы из указанной коллекции в этот список, начиная с указанной позиции.
     @Override
     public boolean addAll(int index, Collection<? extends T> c) {
-        if (index > listLength || index < 0) {
-            throw new IndexOutOfBoundsException("Переданное значение index = " + index + " некорректно." +
-                    " Для значения должно выполняться условие 0 <= index < " + listLength);
-        }
+        checkIndexBoundsToAdd(index);
+
         if (c.size() == 0) {
             return false;
         }
@@ -257,6 +247,7 @@ public class ArrayList<T> implements List<T> {
                 ++deletedElementsCount;
             }
         }
+
         return deletedElementsCount != 0;
     }
 
@@ -274,10 +265,7 @@ public class ArrayList<T> implements List<T> {
     // Возвращает элемент в указанной позиции в этом списке.
     @Override
     public T get(int index) {
-        if (index > listLength || index < 0) {
-            throw new IndexOutOfBoundsException("Переданное значение index = " + index + " некорректно." +
-                    " Для значения должно выполняться условие 0 <= index < " + listLength);
-        }
+        checkIndexBounds(index);
 
         return items[index];
     }
@@ -285,10 +273,7 @@ public class ArrayList<T> implements List<T> {
     // Заменяет элемент в указанной позиции в этом списке на указанный элемент.
     @Override
     public T set(int index, T element) {
-        if (index > listLength || index < 0) {
-            throw new IndexOutOfBoundsException("Переданное значение index = " + index + " некорректно." +
-                    " Для значения должно выполняться условие 0 <= index < " + listLength);
-        }
+        checkIndexBounds(index);
 
         T oldValue = items[index];
 
@@ -300,15 +285,15 @@ public class ArrayList<T> implements List<T> {
     // Вставляет указанный элемент в указанную позицию в этом списке.
     @Override
     public void add(int index, T element) {
-        if (index > listLength || index < 0) {
-            throw new IndexOutOfBoundsException("Переданное значение index = " + index + " некорректно." +
-                    " Для значения должно выполняться условие 0 <= index < " + listLength);
-        }
+        checkIndexBoundsToAdd(index);
+
         if (listLength >= items.length) {
             ensureCapacity(items.length * 2);
         }
 
-        System.arraycopy(items, index, items, index + 1, listLength - index);
+        if (index != listLength) {
+            System.arraycopy(items, index, items, index + 1, listLength - index);
+        }
 
         items[index] = element;
 
@@ -319,10 +304,7 @@ public class ArrayList<T> implements List<T> {
     // Удаляет элемент в указанной позиции в этом списке.
     @Override
     public T remove(int index) {
-        if (index > listLength || index < 0) {
-            throw new IndexOutOfBoundsException("Переданное значение index = " + index + " некорректно." +
-                    " Для значения должно выполняться условие 0 <= index < " + listLength);
-        }
+        checkIndexBounds(index);
 
         T oldValue = items[index];
 
@@ -353,7 +335,7 @@ public class ArrayList<T> implements List<T> {
     // если этот список не содержит элемент.
     @Override
     public int lastIndexOf(Object o) {
-        for (int i = size() - 1; i >= 0; --i) {
+        for (int i = listLength - 1; i >= 0; --i) {
             if (Objects.equals(items[i], o)) {
                 return i;
             }
@@ -378,5 +360,19 @@ public class ArrayList<T> implements List<T> {
     public List<T> subList(int fromIndex, int toIndex) {
         //noinspection ConstantConditions
         return null;
+    }
+
+    private void checkIndexBounds(int index) {
+        if (index >= listLength || index < 0) {
+            throw new IndexOutOfBoundsException("Переданное значение index = " + index + " некорректно." +
+                    " Для значения должно выполняться условие 0 <= index < " + listLength);
+        }
+    }
+
+    private void checkIndexBoundsToAdd(int index) {
+        if (index > listLength || index < 0) {
+            throw new IndexOutOfBoundsException("Переданное значение index = " + index + " некорректно." +
+                    " Для значения должно выполняться условие 0 <= index <= " + listLength);
+        }
     }
 }
