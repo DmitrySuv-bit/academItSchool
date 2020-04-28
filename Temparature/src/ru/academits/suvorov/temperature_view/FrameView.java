@@ -1,10 +1,11 @@
-package ru.academits.suvorov.temperature_gui;
+package ru.academits.suvorov.temperature_view;
 
 import ru.academits.suvorov.model.TemperatureConverter;
 import ru.academits.suvorov.view.View;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.DecimalFormat;
 
 public class FrameView implements View {
     private final JTextField temperatureInput = new JTextField();
@@ -15,6 +16,9 @@ public class FrameView implements View {
     private final JLabel heading = new JLabel();
     private final JLabel inputText = new JLabel();
     private final JLabel outputText = new JLabel();
+    private final JButton resetButton = new JButton();
+    private final JLabel fromText = new JLabel();
+    private final JLabel toText = new JLabel();
 
     public FrameView() {
         SwingUtilities.invokeLater(() -> {
@@ -71,7 +75,6 @@ public class FrameView implements View {
             convertButton.setText("Convert");
             container.add(convertButton, constraints4);
 
-
             GridBagConstraints constraints5 = new GridBagConstraints();
             constraints5.fill = GridBagConstraints.HORIZONTAL;
             constraints5.insets = new Insets(5, 5, 5, 5);
@@ -95,8 +98,8 @@ public class FrameView implements View {
             GridBagConstraints constraints7 = new GridBagConstraints();
             constraints7.fill = GridBagConstraints.HORIZONTAL;
             constraints7.insets = new Insets(5, 5, 5, 5);
-            constraints7.gridwidth = 2;
-            constraints7.gridx = 0;
+            constraints7.gridwidth = 1;
+            constraints7.gridx = 1;
             constraints7.gridy = 2;
             constraints7.ipadx = 0;
             constraints7.ipady = 0;
@@ -110,7 +113,7 @@ public class FrameView implements View {
             constraints8.fill = GridBagConstraints.HORIZONTAL;
             constraints8.insets = new Insets(5, 5, 5, 5);
             constraints8.gridwidth = 2;
-            constraints8.gridx = 3;
+            constraints8.gridx = 4;
             constraints8.gridy = 2;
             constraints8.ipadx = 0;
             constraints8.ipady = 0;
@@ -119,6 +122,35 @@ public class FrameView implements View {
             outputTemperatureList.addItem("Fahrenheit");
             outputTemperatureList.addItem("Celsius");
             outputTemperatureList.setEditable(false);
+
+            GridBagConstraints constraints9 = new GridBagConstraints();
+            constraints9.fill = GridBagConstraints.HORIZONTAL;
+            constraints9.insets = new Insets(5, 5, 5, 5);
+            constraints9.gridwidth = 1;
+            constraints9.gridx = 2;
+            constraints9.gridy = 2;
+            constraints9.ipadx = 0;
+            constraints9.ipady = 0;
+            resetButton.setText("Reset");
+            container.add(resetButton, constraints9);
+
+            GridBagConstraints constraints10 = new GridBagConstraints();
+            constraints10.fill = GridBagConstraints.HORIZONTAL;
+            constraints10.insets = new Insets(5, 5, 5, 5);
+            constraints10.gridwidth = 1;
+            constraints10.gridx = 0;
+            constraints10.gridy = 2;
+            fromText.setText("From");
+            container.add(fromText, constraints10);
+
+            GridBagConstraints constraints11 = new GridBagConstraints();
+            constraints11.fill = GridBagConstraints.HORIZONTAL;
+            constraints11.insets = new Insets(5, 5, 5, 5);
+            constraints11.gridwidth = 1;
+            constraints11.gridx = 3;
+            constraints11.gridy = 2;
+            toText.setText("To");
+            container.add(toText, constraints11);
         });
     }
 
@@ -135,6 +167,11 @@ public class FrameView implements View {
 
         outputTemperatureList.addActionListener(e -> output[0] = (String) outputTemperatureList.getSelectedItem());
 
+        resetButton.addActionListener(e -> {
+            temperatureInput.setText("");
+            temperatureOutput.setText("");
+        });
+
         convertButton.addActionListener(e -> {
             try {
                 if (temperatureInput.getText().isEmpty()) {
@@ -148,9 +185,19 @@ public class FrameView implements View {
 
                 double temperature = Double.parseDouble(temperatureInput.getText());
 
-                temperatureOutput.setText(Double.toString(TemperatureConverter.convertTemperature(temperature, input[0], output[0])));
+                String temperatureOutputFormat = new DecimalFormat("#0.00").
+                        format(TemperatureConverter.convertTemperature(temperature, input[0], output[0]));
+
+                if (temperatureOutputFormat.length() > 11) {
+                    JOptionPane.showMessageDialog(null, "Output: " + temperatureOutputFormat +
+                            " " + outputTemperatureList.getSelectedItem(), "Result", JOptionPane.PLAIN_MESSAGE);
+                    return;
+                }
+
+                temperatureOutput.setText(temperatureOutputFormat);
             } catch (NumberFormatException v) {
-                JOptionPane.showMessageDialog(null, "Введеное значение не является числом!!!", "Warning", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Введеное значение не является числом!!!",
+                        "Warning", JOptionPane.WARNING_MESSAGE);
             }
         });
     }

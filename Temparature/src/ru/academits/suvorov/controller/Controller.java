@@ -2,7 +2,7 @@ package ru.academits.suvorov.controller;
 
 import ru.academits.suvorov.view.View;
 
-public class Controller  {
+public class Controller {
     private final View view;
 
     public Controller(View view) {

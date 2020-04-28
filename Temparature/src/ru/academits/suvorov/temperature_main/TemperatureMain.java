@@ -1,7 +1,7 @@
 package ru.academits.suvorov.temperature_main;
 
 import ru.academits.suvorov.controller.Controller;
-import ru.academits.suvorov.temperature_gui.FrameView;
+import ru.academits.suvorov.temperature_view.FrameView;
 import ru.academits.suvorov.view.View;
 
 public class TemperatureMain {
