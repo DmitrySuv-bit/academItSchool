@@ -3,7 +3,7 @@ package ru.academits.suvorov.hash_table;
 import java.util.*;
 
 public class HashTable<T> implements Collection<T> {
-    private ArrayList<T>[] hashTable;
+    private final ArrayList<T>[] hashTable;
     private int tableLength;
     private int modCount;
 
@@ -33,11 +33,7 @@ public class HashTable<T> implements Collection<T> {
 
     @Override
     public boolean contains(Object o) {
-        if (o == null) {
-            throw new NullPointerException("Переданный объект равен null");
-        }
-
-        return hashTable[getIndexInHashTable(o)].contains(o);
+        return hashTable[getIndexInHashTable(o)] != null && hashTable[getIndexInHashTable(o)].contains(o);
     }
 
     @Override
@@ -112,22 +108,58 @@ public class HashTable<T> implements Collection<T> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return false;
+        for (Object e : c) {
+            if (!contains(e)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @Override
     public boolean addAll(Collection<? extends T> c) {
-        return false;
+        boolean status = false;
+
+        for (T element : c) {
+            status = this.add(element);
+        }
+
+        return status;
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return false;
+        int deletedElementsCount = 0;
+
+        for (Object element : c) {
+            while (remove(element)) {
+                ++deletedElementsCount;
+            }
+        }
+
+        return deletedElementsCount != 0;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return false;
+        int deletedElementsCount = 0;
+
+        for (ArrayList<T> list : hashTable) {
+            if (list != null && list.size() > 0) {
+                for (int i = 0; i < list.size(); ++i) {
+                    if (!c.contains(list.get(i))) {
+                        list.remove(list.get(i));
+
+                        --i;
+                        --tableLength;
+                        ++deletedElementsCount;
+                    }
+                }
+            }
+        }
+
+        return deletedElementsCount != 0;
     }
 
     @Override
