@@ -79,7 +79,8 @@ public class ListMain {
         System.out.println("Список после добавления значения: " + list5);
         System.out.println("-----------------------------------------------------------------------------------------");
 
-        Integer value2 = 1;
+        Integer value2 = 5;
+
         boolean isRemove = list6.removeByData(value2);
 
         System.out.println("Удаление узла по значению = " + value2 + ": " + isRemove);

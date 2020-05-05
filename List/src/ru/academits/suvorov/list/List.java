@@ -8,7 +8,6 @@ public class List<T> {
     private int length;
 
     public List() {
-        length = 0;
     }
 
     public List(T data) {
@@ -30,7 +29,8 @@ public class List<T> {
             stringBuilder.append(p).append(", ");
         }
 
-        stringBuilder.deleteCharAt(stringBuilder.length() - 2).append("}");
+        stringBuilder.setLength(stringBuilder.length() - 2);
+        stringBuilder.append("}");
 
         return stringBuilder.toString();
     }
@@ -146,15 +146,13 @@ public class List<T> {
 
     // Удаление узла по значению, пусть выдает true, если элемент был удален
     public boolean removeByData(T data) {
-        if (Objects.equals(data, head.getData())) {
-            removeFirst();
-
-            return true;
-        }
-
-        for (ListItem<T> p = head; p.getNext() != null; p = p.getNext()) {
-            if (Objects.equals(data, p.getNext().getData())) {
-                p.setNext(p.getNext().getNext());
+        for (ListItem<T> current = head, prev = null; current != null; prev = current, current = current.getNext()) {
+            if (Objects.equals(data, current.getData())) {
+                if (prev == null) {
+                    head = current.getNext();
+                } else {
+                    prev.setNext(current.getNext());
+                }
 
                 --length;
 
