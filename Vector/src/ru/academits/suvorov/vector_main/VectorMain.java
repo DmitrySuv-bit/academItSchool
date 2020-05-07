@@ -4,6 +4,7 @@ import ru.academits.suvorov.vector.Vector;
 
 public class VectorMain {
     public static void main(String[] args) {
+        // +
         // Vector(n) – размерность n, все компоненты равны 0
         Vector vector0 = new Vector(1);
 
