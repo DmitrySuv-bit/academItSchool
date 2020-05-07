@@ -1,4 +1,4 @@
-package ru.academits.suvorov.main;
+package ru.academits.suvorov.temperature.main;
 
 import ru.academits.suvorov.person.Person;
 
