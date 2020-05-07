@@ -59,6 +59,7 @@ public class ShapeMain {
     }
 
     public static void main(String[] args) {
+        // +
         Shape[] shapes = {
                 new Square(20),
                 new Square(20),
