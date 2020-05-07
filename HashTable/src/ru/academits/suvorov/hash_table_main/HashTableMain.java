@@ -97,9 +97,12 @@ public class HashTableMain {
         hashTable.add(77);
         hashTable.add(88);
         hashTable.add(99);
+        hashTable.add(77);
 
         list.add(77);
         list.add(88);
+        list.add(88);
+        list.add(77);
 
         hashTable.retainAll(list);
 
