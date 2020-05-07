@@ -43,6 +43,7 @@ public class ArrayListHomeMain {
     }
 
     public static void main(String[] args) {
+        // +
         ArrayList<String> stringsList = getFileStrings("./ArrayListHome/strings.txt");
 
         System.out.println("Чтение из файла и запись в Array List: " + stringsList);
