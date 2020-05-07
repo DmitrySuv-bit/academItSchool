@@ -57,7 +57,7 @@ public class ArrayList<T> implements List<T> {
         }
 
         if (listLength != 0) {
-            stringBuilder.deleteCharAt(stringBuilder.length() - 2);
+            stringBuilder.setLength(stringBuilder.length() - 2);
         }
 
         return stringBuilder.append("}").toString();
