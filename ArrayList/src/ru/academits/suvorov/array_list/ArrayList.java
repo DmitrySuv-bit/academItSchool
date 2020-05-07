@@ -33,11 +33,10 @@ public class ArrayList<T> implements List<T> {
         @Override
         public T next() {
             if (initialModCount != modCount) {
-                throw new ConcurrentModificationException("Попытка модифицировать коллекцию " +
-                        "во время итерирования по ней");
+                throw new ConcurrentModificationException("Коллекция была модифицирована во время итерирования по ней");
             }
             if (!hasNext()) {
-                throw new NoSuchElementException("В текущем коллекции больше нет элементов");
+                throw new NoSuchElementException("В текущей коллекции больше нет элементов");
             }
 
             ++currentIndex;
@@ -48,6 +47,10 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public String toString() {
+        if (listLength == 0) {
+            return "{}";
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("{");
@@ -56,11 +59,10 @@ public class ArrayList<T> implements List<T> {
             stringBuilder.append(items[i]).append(", ");
         }
 
-        if (listLength != 0) {
-            stringBuilder.setLength(stringBuilder.length() - 2);
-        }
+        stringBuilder.setLength(stringBuilder.length() - 2);
+        stringBuilder.append("}");
 
-        return stringBuilder.append("}").toString();
+        return stringBuilder.toString();
     }
 
     @Override
@@ -74,7 +76,7 @@ public class ArrayList<T> implements List<T> {
 
         ArrayList<?> arrayList = (ArrayList<?>) o;
 
-        return listLength == arrayList.listLength && Arrays.equals(items, arrayList.items);
+        return Arrays.equals(items, arrayList.items);
     }
 
     @Override
@@ -83,7 +85,6 @@ public class ArrayList<T> implements List<T> {
         int hash = 1;
 
         hash = hash * prime + Arrays.hashCode(items);
-        hash = hash * prime + listLength;
 
         return hash;
     }
@@ -161,11 +162,13 @@ public class ArrayList<T> implements List<T> {
     // Удаляет первое вхождение указанного элемента из этого списка, если он присутствует.
     @Override
     public boolean remove(Object o) {
-        if (indexOf(o) == -1) {
+        int indexOf = indexOf(o);
+
+        if (indexOf == -1) {
             return false;
         }
 
-        remove(indexOf(o));
+        remove(indexOf);
 
         return true;
     }
@@ -218,7 +221,7 @@ public class ArrayList<T> implements List<T> {
     // Удаляет из этого списка все его элементы, которые содержатся в указанной коллекции.
     @Override
     public boolean removeAll(Collection<?> c) {
-        int deletedElementsCount = 0;
+        boolean deletedElementsCount = false;
 
         for (Object element : c) {
             for (int i = 0; i < listLength; ++i) {
@@ -226,29 +229,29 @@ public class ArrayList<T> implements List<T> {
                     remove(i);
 
                     --i;
-                    ++deletedElementsCount;
+                    deletedElementsCount = true;
                 }
             }
         }
 
-        return deletedElementsCount != 0;
+        return deletedElementsCount;
     }
 
     // Сохраняет только элементы в этом списке, которые содержатся в указанной коллекции.
     @Override
     public boolean retainAll(Collection<?> c) {
-        int deletedElementsCount = 0;
+        boolean deletedElementsCount = false;
 
         for (int i = 0; i < listLength; ++i) {
             if (!c.contains(items[i])) {
                 remove(i);
 
                 --i;
-                ++deletedElementsCount;
+                deletedElementsCount = true;
             }
         }
 
-        return deletedElementsCount != 0;
+        return deletedElementsCount;
     }
 
     // Удаляет все элементы из этого списка. Список будет пустым после возврата этого вызова.
@@ -288,7 +291,7 @@ public class ArrayList<T> implements List<T> {
         checkIndexBoundsToAdd(index);
 
         if (listLength >= items.length) {
-            ensureCapacity(items.length * 2);
+            ensureCapacity(items.length * 2 + 5);
         }
 
         if (index != listLength) {
@@ -314,6 +317,8 @@ public class ArrayList<T> implements List<T> {
 
         --listLength;
         ++modCount;
+
+        items[listLength] = null;
 
         return oldValue;
     }

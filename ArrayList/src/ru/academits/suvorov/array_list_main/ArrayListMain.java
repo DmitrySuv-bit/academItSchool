@@ -14,7 +14,7 @@ public class ArrayListMain {
         System.out.println("-----------------------------------------------------------------------------------------");
 
         // arrayList с заданной вместимостью с добавлением указанного элемента в конец списка
-        ArrayList<Integer> arrayList2 = new ArrayList<>(10);
+        ArrayList<Integer> arrayList2 = new ArrayList<>(0);
 
         arrayList2.add(1);
         arrayList2.add(2);
@@ -25,7 +25,6 @@ public class ArrayListMain {
         arrayList2.add(2);
         arrayList2.add(6, 7);
         arrayList2.add(8, 10);
-        System.out.println(arrayList2);
 
         System.out.println("arrayList2 с заданной вместимостью с добавлением указанного элемента в конец списка: ");
         System.out.println(arrayList2);
@@ -136,6 +135,5 @@ public class ArrayListMain {
         arrayList2.clear();
 
         System.out.println("Список arrayList2 после удаления всех элементов: " + arrayList2);
-
     }
 }
