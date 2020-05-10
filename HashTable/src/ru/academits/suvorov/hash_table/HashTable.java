@@ -121,47 +121,43 @@ public class HashTable<T> implements Collection<T> {
 
     @Override
     public boolean addAll(Collection<? extends T> c) {
-        boolean status = false;
-
         for (T element : c) {
             add(element);
-
-            status = true;
         }
 
-        return status;
+        return c.size() != 0;
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        boolean deletedElementsCount = false;
+        boolean isChangedCollection = false;
 
         for (Object element : c) {
             while (remove(element)) {
-                deletedElementsCount = true;
+                isChangedCollection = true;
             }
         }
 
-        return deletedElementsCount;
+        return isChangedCollection;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        boolean deletedElementsCount = false;
+        boolean isChangedCollection = false;
         size = 0;
 
         for (ArrayList<T> list : hashTable) {
             if (list != null && list.size() > 0) {
-                list.retainAll(c);
+                if (!list.retainAll(c)) {
+                    size += list.size();
+                    ++modCount;
 
-                size += list.size();
-                ++modCount;
-
-                deletedElementsCount = true;
+                    isChangedCollection = true;
+                }
             }
         }
 
-        return deletedElementsCount;
+        return isChangedCollection;
     }
 
     @Override

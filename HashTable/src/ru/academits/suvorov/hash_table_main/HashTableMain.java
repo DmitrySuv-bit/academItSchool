@@ -97,16 +97,14 @@ public class HashTableMain {
         hashTable.add(77);
         hashTable.add(88);
         hashTable.add(99);
-        hashTable.add(77);
 
         list.add(77);
         list.add(88);
         list.add(88);
-        list.add(77);
 
         hashTable.retainAll(list);
 
-        System.out.println("Сохраненые элементы, которые содержались в коллекции list: ");
+        System.out.println("Сохраненые элементы, которые содержались в коллекции list: " + hashTable.retainAll(list));
 
         for (Integer element : hashTable) {
             System.out.print(element + " ");
