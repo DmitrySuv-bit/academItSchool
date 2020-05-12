@@ -221,7 +221,7 @@ public class ArrayList<T> implements List<T> {
     // Удаляет из этого списка все его элементы, которые содержатся в указанной коллекции.
     @Override
     public boolean removeAll(Collection<?> c) {
-        boolean isChangedCollection = false;
+        boolean isCollectionChanged = false;
 
         for (Object element : c) {
             for (int i = 0; i < listLength; ++i) {
@@ -229,29 +229,29 @@ public class ArrayList<T> implements List<T> {
                     remove(i);
 
                     --i;
-                    isChangedCollection = true;
+                    isCollectionChanged = true;
                 }
             }
         }
 
-        return isChangedCollection;
+        return isCollectionChanged;
     }
 
     // Сохраняет только элементы в этом списке, которые содержатся в указанной коллекции.
     @Override
     public boolean retainAll(Collection<?> c) {
-        boolean isChangedCollection = false;
+        boolean isCollectionChanged = false;
 
         for (int i = 0; i < listLength; ++i) {
             if (!c.contains(items[i])) {
                 remove(i);
 
                 --i;
-                isChangedCollection = true;
+                isCollectionChanged = true;
             }
         }
 
-        return isChangedCollection;
+        return isCollectionChanged;
     }
 
     // Удаляет все элементы из этого списка. Список будет пустым после возврата этого вызова.
