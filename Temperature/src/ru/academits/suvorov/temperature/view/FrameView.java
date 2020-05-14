@@ -22,7 +22,6 @@ public class FrameView implements View {
     @Override
     public void startApplication() {
         SwingUtilities.invokeLater(() -> {
-
             createFrame();
             initEvents();
             addTemperatureScales(converter);
