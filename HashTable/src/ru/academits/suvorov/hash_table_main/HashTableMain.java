@@ -102,8 +102,6 @@ public class HashTableMain {
         list.add(88);
         list.add(88);
 
-        hashTable.retainAll(list);
-
         System.out.println("Сохраненые элементы, которые содержались в коллекции list: " + hashTable.retainAll(list));
 
         for (Integer element : hashTable) {
