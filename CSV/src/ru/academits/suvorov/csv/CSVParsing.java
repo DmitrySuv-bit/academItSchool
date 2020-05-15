@@ -1,9 +1,6 @@
 package ru.academits.suvorov.csv;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 
 public class CSVParsing {
     private final String inputFile;
@@ -14,7 +11,7 @@ public class CSVParsing {
         this.outputFile = outputFile;
     }
 
-    public void parsing() throws IOException {
+    public void parsing() {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(inputFile))) {
             try (PrintWriter printWriter = new PrintWriter(outputFile)) {
 
@@ -38,6 +35,7 @@ public class CSVParsing {
                         printWriter.println("<tr>");
                         printWriter.println("<td>");
                     }
+
                     for (int i = 0; i < line.length(); ++i) {
                         if (isInQuotes) {
                             if (line.charAt(i) == '"') {
@@ -63,6 +61,7 @@ public class CSVParsing {
                                 }
                             } else {
                                 printSymbol(printWriter, line, i);
+
                                 if (i == line.length() - 1) {
                                     isLineTransfer = true;
                                     printWriter.println();
@@ -83,7 +82,8 @@ public class CSVParsing {
                             }
                         } else {
                             printSymbol(printWriter, line, i);
-                            if (i == line.length() -1) {
+
+                            if (i == line.length() - 1) {
                                 printWriter.println();
                                 printWriter.println("</td>");
                             }
@@ -92,21 +92,33 @@ public class CSVParsing {
                     if (!isLineTransfer) {
                         printWriter.println("</tr>");
                     }
+
                     line = bufferedReader.readLine();
                 }
                 printWriter.println("</table>");
                 printWriter.println("</body>");
                 printWriter.println("</html>");
             }
+        } catch (IOException e) {
+            System.out.println("Не удается найти указанный файл: " + inputFile);
+            System.out.println();
         }
     }
 
     private static void printSymbol(PrintWriter printWriter, String line, int index) {
+        //noinspection EnhancedSwitchMigration
         switch (line.charAt(index)) {
-            case '<' -> printWriter.print("&lt");
-            case '>' -> printWriter.print("&gt");
-            case '&' -> printWriter.print("&amp");
-            default -> printWriter.print(line.charAt(index));
+            case '<':
+                printWriter.print("&lt");
+                break;
+            case '>':
+                printWriter.print("&gt");
+                break;
+            case '&':
+                printWriter.print("&amp");
+                break;
+            default:
+                printWriter.print(line.charAt(index));
         }
     }
 }
