@@ -144,19 +144,21 @@ public class HashTable<T> implements Collection<T> {
     @Override
     public boolean retainAll(Collection<?> c) {
         boolean isCollectionChanged = false;
-        size = 0;
+        int newSize = 0;
 
         for (ArrayList<T> list : hashTable) {
             if (list != null && list.size() > 0) {
                 list.retainAll(c);
 
-                if (!list.isEmpty()) {
-                    size += list.size();
-                    ++modCount;
-
-                    isCollectionChanged = true;
-                }
+                newSize += list.size();
             }
+        }
+
+        if (size != newSize) {
+            size = newSize;
+            ++modCount;
+
+            isCollectionChanged = true;
         }
 
         return isCollectionChanged;
