@@ -1,18 +1,18 @@
 package ru.academits.suvorov.temperature.model;
 
-public class CelsiusConvert implements TemperatureScale {
+public class KelvinConverter implements TemperatureScale {
     @Override
     public String toString() {
-        return "Celsius";
+        return "Kelvin";
     }
 
     @Override
     public double convertFromCelsius(double initialTemperature) {
-        return initialTemperature;
+        return initialTemperature + 273.15;
     }
 
     @Override
     public double convertToCelsius(double initialTemperature) {
-        return initialTemperature;
+        return initialTemperature - 273.15;
     }
 }
