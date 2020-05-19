@@ -1,21 +1,21 @@
 package ru.academits.suvorov.temperature.view;
 
-import ru.academits.suvorov.temperature.model.Converter;
+import ru.academits.suvorov.temperature.model.TemperatureScale;
 
 import javax.swing.*;
 import java.awt.*;
 import java.text.DecimalFormat;
 
 public class FrameView implements View {
-    private JTextField temperatureInput;
+    private JTextField inputTemperature;
     private JButton convertButton;
-    private JTextField temperatureOutput;
+    private JTextField outputTemperature;
     private JComboBox<String> inputTemperatureList;
     private JComboBox<String> outputTemperatureList;
     private JButton resetButton;
-    private final Converter[] converter;
+    private final TemperatureScale[] converter;
 
-    public FrameView(Converter[] converter) {
+    public FrameView(TemperatureScale[] converter) {
         this.converter = converter;
     }
 
@@ -37,40 +37,45 @@ public class FrameView implements View {
         outputTemperatureList.addActionListener(e -> output[0] = (String) outputTemperatureList.getSelectedItem());
 
         resetButton.addActionListener(e -> {
-            temperatureInput.setText("");
-            temperatureOutput.setText("");
+            inputTemperature.setText("");
+            outputTemperature.setText("");
         });
 
         convertButton.addActionListener(e -> {
             try {
-                if (temperatureInput.getText().isEmpty()) {
+                if (inputTemperature.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Enter a value in the input field");
                     return;
                 }
-                if (temperatureInput.getText().length() > 14) {
+                if (inputTemperature.getText().length() > 14) {
                     JOptionPane.showMessageDialog(null, "Entered a long value in the input field");
                     return;
                 }
 
-                double temperature = Double.parseDouble(temperatureInput.getText());
+                double temperature = Double.parseDouble(inputTemperature.getText());
+
+                for (TemperatureScale t : converter) {
+                    if (t.toString().equals(input[0])) {
+                        temperature = t.convertToCelsius(temperature);
+                    }
+                }
 
                 String temperatureOutputFormat;
 
-                for (Converter t : converter) {
-                    if (t.getScale() == null) {
-                        break;
-                    } else if (t.getScale().equals(input[0])) {
+                for (TemperatureScale t : converter) {
+                    if (t.toString().equals(output[0])) {
                         temperatureOutputFormat = new DecimalFormat("#0.00").
-                                format(t.convertTemperature(temperature, output[0]));
+                                format(t.convertFromCelsius(temperature));
 
                         if (temperatureOutputFormat.length() > 11) {
                             JOptionPane.showMessageDialog(null, "Output: "
                                             + temperatureOutputFormat + " " + outputTemperatureList.getSelectedItem(),
                                     "Result", JOptionPane.PLAIN_MESSAGE);
+
                             return;
                         }
 
-                        temperatureOutput.setText(temperatureOutputFormat);
+                        outputTemperature.setText(temperatureOutputFormat);
                     }
                 }
             } catch (NumberFormatException v) {
@@ -98,12 +103,7 @@ public class FrameView implements View {
         constraints1.fill = GridBagConstraints.HORIZONTAL;
         constraints1.insets = new Insets(5, 0, 20, 0);
         constraints1.gridwidth = 5;
-        constraints1.gridx = 0;
-        constraints1.gridy = 0;
-        JLabel heading = new JLabel();
-        heading.setHorizontalAlignment(JLabel.CENTER);
-        //noinspection SpellCheckingInspection
-        heading.setText("Temperature converter from Suvorov");
+        JLabel heading = new JLabel("Temperature converter from Savor's", JLabel.CENTER);
         container.add(heading, constraints1);
 
         GridBagConstraints constraints2 = new GridBagConstraints();
@@ -112,8 +112,7 @@ public class FrameView implements View {
         constraints2.gridwidth = 1;
         constraints2.gridx = 0;
         constraints2.gridy = 1;
-        JLabel inputText = new JLabel();
-        inputText.setText("Input");
+        JLabel inputText = new JLabel("Input");
         container.add(inputText, constraints2);
 
         GridBagConstraints constraints3 = new GridBagConstraints();
@@ -124,19 +123,16 @@ public class FrameView implements View {
         constraints3.gridy = 1;
         constraints3.ipadx = 100;
         constraints3.ipady = 0;
-        temperatureInput = new JTextField();
-        container.add(temperatureInput, constraints3);
+        inputTemperature = new JTextField();
+        container.add(inputTemperature, constraints3);
 
         GridBagConstraints constraints4 = new GridBagConstraints();
         constraints4.fill = GridBagConstraints.HORIZONTAL;
         constraints4.insets = new Insets(5, 5, 5, 5);
         constraints4.gridwidth = 1;
         constraints4.gridx = 2;
-        constraints4.gridy = 1;
-        constraints4.ipadx = 0;
-        constraints4.ipady = 0;
-        convertButton = new JButton();
-        convertButton.setText("Convert");
+        constraints4.gridy = 2;
+        convertButton = new JButton("Convert");
         container.add(convertButton, constraints4);
 
         GridBagConstraints constraints5 = new GridBagConstraints();
@@ -145,8 +141,7 @@ public class FrameView implements View {
         constraints5.gridwidth = 1;
         constraints5.gridx = 3;
         constraints5.gridy = 1;
-        JLabel outputText = new JLabel();
-        outputText.setText("Output");
+        JLabel outputText = new JLabel("Output");
         container.add(outputText, constraints5);
 
         GridBagConstraints constraints6 = new GridBagConstraints();
@@ -157,9 +152,9 @@ public class FrameView implements View {
         constraints6.gridy = 1;
         constraints6.ipadx = 100;
         constraints6.ipady = 0;
-        temperatureOutput = new JTextField();
-        temperatureOutput.setEditable(false);
-        container.add(temperatureOutput, constraints6);
+        outputTemperature = new JTextField();
+        outputTemperature.setEditable(false);
+        container.add(outputTemperature, constraints6);
 
         GridBagConstraints constraints7 = new GridBagConstraints();
         constraints7.fill = GridBagConstraints.HORIZONTAL;
@@ -167,8 +162,6 @@ public class FrameView implements View {
         constraints7.gridwidth = 1;
         constraints7.gridx = 1;
         constraints7.gridy = 2;
-        constraints7.ipadx = 0;
-        constraints7.ipady = 0;
         inputTemperatureList = new JComboBox<>();
         container.add(inputTemperatureList, constraints7);
         inputTemperatureList.setEditable(false);
@@ -179,8 +172,6 @@ public class FrameView implements View {
         constraints8.gridwidth = 2;
         constraints8.gridx = 4;
         constraints8.gridy = 2;
-        constraints8.ipadx = 0;
-        constraints8.ipady = 0;
         outputTemperatureList = new JComboBox<>();
         container.add(outputTemperatureList, constraints8);
         outputTemperatureList.setEditable(false);
@@ -190,11 +181,8 @@ public class FrameView implements View {
         constraints9.insets = new Insets(5, 5, 5, 5);
         constraints9.gridwidth = 1;
         constraints9.gridx = 2;
-        constraints9.gridy = 2;
-        constraints9.ipadx = 0;
-        constraints9.ipady = 0;
-        resetButton = new JButton();
-        resetButton.setText("Reset");
+        constraints9.gridy = 1;
+        resetButton = new JButton("Reset");
         container.add(resetButton, constraints9);
 
         GridBagConstraints constraints10 = new GridBagConstraints();
@@ -203,8 +191,7 @@ public class FrameView implements View {
         constraints10.gridwidth = 1;
         constraints10.gridx = 0;
         constraints10.gridy = 2;
-        JLabel fromText = new JLabel();
-        fromText.setText("From");
+        JLabel fromText = new JLabel("From");
         container.add(fromText, constraints10);
 
         GridBagConstraints constraints11 = new GridBagConstraints();
@@ -213,17 +200,14 @@ public class FrameView implements View {
         constraints11.gridwidth = 1;
         constraints11.gridx = 3;
         constraints11.gridy = 2;
-        JLabel toText = new JLabel();
-        toText.setText("To");
+        JLabel toText = new JLabel("To");
         container.add(toText, constraints11);
     }
 
-    private void addTemperatureScales(Converter[] converter) {
-        for (Converter t : converter) {
-            if (t.getScale() != null) {
-                inputTemperatureList.addItem(t.getScale());
-                outputTemperatureList.addItem(t.getScale());
-            }
+    private void addTemperatureScales(TemperatureScale[] converter) {
+        for (TemperatureScale t : converter) {
+            inputTemperatureList.addItem(t.toString());
+            outputTemperatureList.addItem(t.toString());
         }
     }
 }

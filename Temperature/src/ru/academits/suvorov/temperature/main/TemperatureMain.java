@@ -6,9 +6,10 @@ import ru.academits.suvorov.temperature.view.View;
 
 public class TemperatureMain {
     public static void main(String[] args) {
-        Converter[] converter = {new ConvertCelsius(), new ConvertFahrenheit(), new ConvertKelvin()};
+        TemperatureScale[] temperatureScales = {new CelsiusConvert(), new FahrenheitConvert(), new KelvinConvert(),
+                new ReaumurConvert(), new RankinConvert()};
 
-        View view = new FrameView(converter);
+        View view = new FrameView(temperatureScales);
 
         view.startApplication();
     }
