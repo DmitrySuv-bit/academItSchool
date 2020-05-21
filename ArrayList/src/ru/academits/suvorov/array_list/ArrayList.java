@@ -76,7 +76,17 @@ public class ArrayList<T> implements List<T> {
 
         ArrayList<?> arrayList = (ArrayList<?>) o;
 
-        return Arrays.equals(items, arrayList.items);
+        boolean equal = true;
+
+        for (int i = 0; i < listLength; ++i) {
+            if (!Objects.equals(items[i], arrayList.items[i])) {
+                equal = false;
+
+                break;
+            }
+        }
+
+        return equal;
     }
 
     @Override
@@ -84,7 +94,11 @@ public class ArrayList<T> implements List<T> {
         final int prime = 37;
         int hash = 1;
 
-        hash = hash * prime + Arrays.hashCode(items);
+        for (int i = 0; i < listLength; ++i) {
+            Object element = items[i];
+
+            hash = hash * prime + (element == null ? 0 : element.hashCode());
+        }
 
         return hash;
     }
@@ -162,13 +176,13 @@ public class ArrayList<T> implements List<T> {
     // Удаляет первое вхождение указанного элемента из этого списка, если он присутствует.
     @Override
     public boolean remove(Object o) {
-        int indexOf = indexOf(o);
+        int index = indexOf(o);
 
-        if (indexOf == -1) {
+        if (index == -1) {
             return false;
         }
 
-        remove(indexOf);
+        remove(index);
 
         return true;
     }
