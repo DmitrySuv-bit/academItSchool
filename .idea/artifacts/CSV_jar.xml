@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" build-on-make="true" name="CSV:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/CSV_jar</output-path>
+    <output-path>$PROJECT_DIR$/CSV/src/ru/academits/suvorov/start_csv</output-path>
     <root id="archive" name="CSV.jar">
       <element id="module-output" name="CSV" />
     </root>
