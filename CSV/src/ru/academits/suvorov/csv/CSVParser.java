@@ -2,19 +2,10 @@ package ru.academits.suvorov.csv;
 
 import java.io.*;
 
-public class CSVParsing {
-    private final String inputFile;
-    private final String outputFile;
-
-    public CSVParsing(String inputFile, String outputFile) {
-        this.inputFile = inputFile;
-        this.outputFile = outputFile;
-    }
-
-    public void parsing() {
+public class CSVParser {
+    public static void disassemble(String inputFile, String outputFile) throws IOException {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(inputFile))) {
             try (PrintWriter printWriter = new PrintWriter(outputFile)) {
-
                 printWriter.println("<!DOCTYPE html>");
                 printWriter.println("<html lang=\"en\">");
                 printWriter.println("<head>");
@@ -25,13 +16,16 @@ public class CSVParsing {
                 printWriter.println("<table>");
 
                 String line = bufferedReader.readLine();
-
                 boolean isInQuotes = false;
                 boolean isDoubleQuotes = false;
-                boolean isLineTransfer = false;
+                boolean isLineTranslation = false;
 
                 while (line != null) {
-                    if (!isLineTransfer) {
+                    if (line.isEmpty()) {
+                        line = bufferedReader.readLine();
+
+                        continue;
+                    } else if (!isLineTranslation) {
                         printWriter.println("<tr>");
                         printWriter.println("<td>");
                     }
@@ -42,11 +36,11 @@ public class CSVParsing {
                                 if (i == line.length() - 1) {
                                     if (isDoubleQuotes) {
                                         printWriter.print(line.charAt(i));
-                                        isLineTransfer = true;
+                                        isLineTranslation = true;
                                         printWriter.println("<br/>");
                                     } else {
                                         isInQuotes = false;
-                                        isLineTransfer = false;
+                                        isLineTranslation = false;
                                         printWriter.println();
                                         printWriter.println("</td>");
                                     }
@@ -57,13 +51,13 @@ public class CSVParsing {
                                     isDoubleQuotes = true;
                                 } else {
                                     isInQuotes = false;
-                                    isLineTransfer = false;
+                                    isLineTranslation = false;
                                 }
                             } else {
                                 printSymbol(printWriter, line, i);
 
                                 if (i == line.length() - 1) {
-                                    isLineTransfer = true;
+                                    isLineTranslation = true;
                                     printWriter.println();
                                     printWriter.println("<br/>");
                                 }
@@ -89,7 +83,7 @@ public class CSVParsing {
                             }
                         }
                     }
-                    if (!isLineTransfer) {
+                    if (!isLineTranslation) {
                         printWriter.println("</tr>");
                     }
 
@@ -99,9 +93,6 @@ public class CSVParsing {
                 printWriter.println("</body>");
                 printWriter.println("</html>");
             }
-        } catch (IOException e) {
-            System.out.println("Не удается найти указанный файл: " + inputFile);
-            System.out.println();
         }
     }
 
@@ -109,13 +100,13 @@ public class CSVParsing {
         //noinspection EnhancedSwitchMigration
         switch (line.charAt(index)) {
             case '<':
-                printWriter.print("&lt");
+                printWriter.print("&lt;");
                 break;
             case '>':
-                printWriter.print("&gt");
+                printWriter.print("&gt;");
                 break;
             case '&':
-                printWriter.print("&amp");
+                printWriter.print("&amp;");
                 break;
             default:
                 printWriter.print(line.charAt(index));
