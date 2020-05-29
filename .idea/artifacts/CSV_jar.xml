@@ -2,6 +2,9 @@
   <artifact type="jar" build-on-make="true" name="CSV:jar">
     <output-path>$PROJECT_DIR$/CSV/src/ru/academits/suvorov/start_csv</output-path>
     <root id="archive" name="CSV.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/CSV/src/ru/academits/suvorov/start_csv/META-INF/MANIFEST.MF" />
+      </element>
       <element id="module-output" name="CSV" />
     </root>
   </artifact>

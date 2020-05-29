@@ -3,7 +3,7 @@ package ru.academits.suvorov.csv;
 import java.io.*;
 
 public class CSVParser {
-    public static void disassemble(String inputFile, String outputFile) throws IOException {
+    public static void parse(String inputFile, String outputFile) throws IOException {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(inputFile))) {
             try (PrintWriter printWriter = new PrintWriter(outputFile)) {
                 printWriter.println("<!DOCTYPE html>");
@@ -18,53 +18,56 @@ public class CSVParser {
                 String line = bufferedReader.readLine();
                 boolean isInQuotes = false;
                 boolean isDoubleQuotes = false;
-                boolean isLineTranslation = false;
+                boolean isLineBreak = false;
 
                 while (line != null) {
                     if (line.isEmpty()) {
                         line = bufferedReader.readLine();
 
                         continue;
-                    } else if (!isLineTranslation) {
+                    }
+                    if (!isLineBreak) {
                         printWriter.println("<tr>");
                         printWriter.println("<td>");
                     }
 
                     for (int i = 0; i < line.length(); ++i) {
+                        char symbol = line.charAt(i);
+
                         if (isInQuotes) {
-                            if (line.charAt(i) == '"') {
+                            if (symbol == '"') {
                                 if (i == line.length() - 1) {
                                     if (isDoubleQuotes) {
-                                        printWriter.print(line.charAt(i));
-                                        isLineTranslation = true;
+                                        printWriter.print(symbol);
+                                        isLineBreak = true;
                                         printWriter.println("<br/>");
                                     } else {
                                         isInQuotes = false;
-                                        isLineTranslation = false;
+                                        isLineBreak = false;
                                         printWriter.println();
                                         printWriter.println("</td>");
                                     }
                                 } else if (isDoubleQuotes) {
-                                    printWriter.print(line.charAt(i));
+                                    printWriter.print(symbol);
                                     isDoubleQuotes = false;
-                                } else if (line.charAt(i) == line.charAt(i + 1)) {
+                                } else if (symbol == line.charAt(i + 1)) {
                                     isDoubleQuotes = true;
                                 } else {
                                     isInQuotes = false;
-                                    isLineTranslation = false;
+                                    isLineBreak = false;
                                 }
                             } else {
-                                printSymbol(printWriter, line, i);
+                                printSymbol(printWriter, symbol);
 
                                 if (i == line.length() - 1) {
-                                    isLineTranslation = true;
+                                    isLineBreak = true;
                                     printWriter.println();
                                     printWriter.println("<br/>");
                                 }
                             }
-                        } else if (line.charAt(i) == '"') {
+                        } else if (symbol == '"') {
                             isInQuotes = true;
-                        } else if (line.charAt(i) == ',') {
+                        } else if (symbol == ',') {
                             if (i == line.length() - 1) {
                                 printWriter.println();
                                 printWriter.println("</td>");
@@ -75,7 +78,7 @@ public class CSVParser {
                                 printWriter.println("<td>");
                             }
                         } else {
-                            printSymbol(printWriter, line, i);
+                            printSymbol(printWriter, symbol);
 
                             if (i == line.length() - 1) {
                                 printWriter.println();
@@ -83,7 +86,7 @@ public class CSVParser {
                             }
                         }
                     }
-                    if (!isLineTranslation) {
+                    if (!isLineBreak) {
                         printWriter.println("</tr>");
                     }
 
@@ -96,9 +99,9 @@ public class CSVParser {
         }
     }
 
-    private static void printSymbol(PrintWriter printWriter, String line, int index) {
+    private static void printSymbol(PrintWriter printWriter, char symbol) {
         //noinspection EnhancedSwitchMigration
-        switch (line.charAt(index)) {
+        switch (symbol) {
             case '<':
                 printWriter.print("&lt;");
                 break;
@@ -109,7 +112,7 @@ public class CSVParser {
                 printWriter.print("&amp;");
                 break;
             default:
-                printWriter.print(line.charAt(index));
+                printWriter.print(symbol);
         }
     }
 }
