@@ -76,17 +76,13 @@ public class ArrayList<T> implements List<T> {
 
         ArrayList<?> arrayList = (ArrayList<?>) o;
 
-        boolean equal = true;
-
         for (int i = 0; i < listLength; ++i) {
             if (!Objects.equals(items[i], arrayList.items[i])) {
-                equal = false;
-
-                break;
+                return false;
             }
         }
 
-        return equal;
+        return true;
     }
 
     @Override
@@ -95,7 +91,7 @@ public class ArrayList<T> implements List<T> {
         int hash = 1;
 
         for (int i = 0; i < listLength; ++i) {
-            Object element = items[i];
+            T element = items[i];
 
             hash = hash * prime + (element == null ? 0 : element.hashCode());
         }
