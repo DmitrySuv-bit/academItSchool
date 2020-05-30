@@ -76,6 +76,10 @@ public class ArrayList<T> implements List<T> {
 
         ArrayList<?> arrayList = (ArrayList<?>) o;
 
+        if (listLength != arrayList.listLength) {
+            return false;
+        }
+
         for (int i = 0; i < listLength; ++i) {
             if (!Objects.equals(items[i], arrayList.items[i])) {
                 return false;

@@ -135,5 +135,6 @@ public class ArrayListMain {
         arrayList2.clear();
 
         System.out.println("Список arrayList2 после удаления всех элементов: " + arrayList2);
+        System.out.println(arrayList1);
     }
 }
