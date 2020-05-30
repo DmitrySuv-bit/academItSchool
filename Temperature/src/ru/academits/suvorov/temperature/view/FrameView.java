@@ -1,5 +1,6 @@
 package ru.academits.suvorov.temperature.view;
 
+import ru.academits.suvorov.temperature.model.ConvertTemperature;
 import ru.academits.suvorov.temperature.model.TemperatureScale;
 
 import javax.swing.*;
@@ -7,34 +8,37 @@ import java.awt.*;
 import java.text.DecimalFormat;
 
 public class FrameView implements View {
+    private final double TEXT_MAX_LENGTH = 14;
     private JTextField inputTemperature;
     private JButton convertButton;
     private JTextField outputTemperature;
-    private JComboBox<String> inputTemperatureList;
-    private JComboBox<String> outputTemperatureList;
+    private JComboBox<TemperatureScale> inputTemperatureList;
+    private JComboBox<TemperatureScale> outputTemperatureList;
     private JButton resetButton;
-    private final TemperatureScale[] converter;
+    private static TemperatureScale inputScale;
+    private static TemperatureScale outputScale;
+    private final TemperatureScale[] scalesArray;
 
     public FrameView(TemperatureScale[] converter) {
-        this.converter = converter;
+        this.scalesArray = converter;
     }
 
     @Override
     public void startApplication() {
         SwingUtilities.invokeLater(() -> {
             createFrame();
+            addTemperatureScales(scalesArray);
             initEvents();
-            addTemperatureScales(converter);
+
         });
     }
 
     private void initEvents() {
-        final String[] input = new String[1];
-        final String[] output = new String[1];
+        inputTemperatureList.addActionListener(e -> inputScale =
+                (TemperatureScale) inputTemperatureList.getSelectedItem());
 
-        inputTemperatureList.addActionListener(e -> input[0] = (String) inputTemperatureList.getSelectedItem());
-
-        outputTemperatureList.addActionListener(e -> output[0] = (String) outputTemperatureList.getSelectedItem());
+        outputTemperatureList.addActionListener(e -> outputScale =
+                (TemperatureScale) outputTemperatureList.getSelectedItem());
 
         resetButton.addActionListener(e -> {
             inputTemperature.setText("");
@@ -45,39 +49,32 @@ public class FrameView implements View {
             try {
                 if (inputTemperature.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Enter a value in the input field");
+
                     return;
                 }
-                if (inputTemperature.getText().length() > 14) {
+                if (inputTemperature.getText().length() > TEXT_MAX_LENGTH) {
                     JOptionPane.showMessageDialog(null, "Entered a long value in the input field");
+
                     return;
                 }
 
                 double temperature = Double.parseDouble(inputTemperature.getText());
 
-                for (TemperatureScale t : converter) {
-                    if (t.toString().equals(input[0])) {
-                        temperature = t.convertToCelsius(temperature);
-                    }
+                String temperatureOutputFormat = new DecimalFormat("#0.00").
+                        format(ConvertTemperature.convert(temperature, inputScale, outputScale));
+
+
+                if (temperatureOutputFormat.length() > TEXT_MAX_LENGTH) {
+                    outputTemperature.setText("");
+
+                    JOptionPane.showMessageDialog(null, "Output: "
+                                    + temperatureOutputFormat + " " + outputTemperatureList.getSelectedItem(),
+                            "Result", JOptionPane.PLAIN_MESSAGE);
+
+                    return;
                 }
 
-                String temperatureOutputFormat;
-
-                for (TemperatureScale t : converter) {
-                    if (t.toString().equals(output[0])) {
-                        temperatureOutputFormat = new DecimalFormat("#0.00").
-                                format(t.convertFromCelsius(temperature));
-
-                        if (temperatureOutputFormat.length() > 11) {
-                            JOptionPane.showMessageDialog(null, "Output: "
-                                            + temperatureOutputFormat + " " + outputTemperatureList.getSelectedItem(),
-                                    "Result", JOptionPane.PLAIN_MESSAGE);
-
-                            return;
-                        }
-
-                        outputTemperature.setText(temperatureOutputFormat);
-                    }
-                }
+                outputTemperature.setText(temperatureOutputFormat);
             } catch (NumberFormatException v) {
                 JOptionPane.showMessageDialog(null, "The value entered is not a number!!!",
                         "Warning", JOptionPane.WARNING_MESSAGE);
@@ -103,7 +100,7 @@ public class FrameView implements View {
         constraints1.fill = GridBagConstraints.HORIZONTAL;
         constraints1.insets = new Insets(5, 0, 20, 0);
         constraints1.gridwidth = 5;
-        JLabel heading = new JLabel("Temperature converter from Savor's", JLabel.CENTER);
+        JLabel heading = new JLabel("Temperature converter from Suvorova", JLabel.CENTER);
         container.add(heading, constraints1);
 
         GridBagConstraints constraints2 = new GridBagConstraints();
@@ -204,10 +201,13 @@ public class FrameView implements View {
         container.add(toText, constraints11);
     }
 
-    private void addTemperatureScales(TemperatureScale[] converter) {
-        for (TemperatureScale t : converter) {
-            inputTemperatureList.addItem(t.toString());
-            outputTemperatureList.addItem(t.toString());
+    private void addTemperatureScales(TemperatureScale[] scalesArray) {
+        for (TemperatureScale t : scalesArray) {
+            inputTemperatureList.addItem(t);
+            outputTemperatureList.addItem(t);
         }
+
+        inputScale = (TemperatureScale) inputTemperatureList.getSelectedItem();
+        outputScale = (TemperatureScale) outputTemperatureList.getSelectedItem();
     }
 }

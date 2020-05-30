@@ -1,4 +1,6 @@
-package ru.academits.suvorov.temperature.model;
+package ru.academits.suvorov.temperature.model.scales;
+
+import ru.academits.suvorov.temperature.model.TemperatureScale;
 
 public class FahrenheitConverter implements TemperatureScale {
     @Override
