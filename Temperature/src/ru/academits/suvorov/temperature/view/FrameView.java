@@ -29,7 +29,6 @@ public class FrameView implements View {
             createFrame();
             addTemperatureScales(scalesArray);
             initEvents();
-
         });
     }
 
