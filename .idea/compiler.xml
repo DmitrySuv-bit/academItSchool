@@ -7,9 +7,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="SSH" />
+        <module name="ExchangeRates" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="ExchangeRates" target="8" />
       <module name="SSH" target="8" />
     </bytecodeTargetLevel>
   </component>

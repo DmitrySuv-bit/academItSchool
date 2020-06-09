@@ -1,15 +1,19 @@
 package ru.nsk.suvorov.exchange_rates.model;
 
+import com.google.gson.Gson;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public class File {
-    ArrayList<String[]> list = new ArrayList<>();
+public class MyFile {
+    Map<String, Double> map = new HashMap<>();
 
     public void readURlFile(String nameFile) throws MalformedURLException {
         URL url = new URL(nameFile);
+
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
             addLineArray(reader);
         } catch (IOException e) {
@@ -26,7 +30,7 @@ public class File {
     }
 
 
-    private void addLineArray (BufferedReader reader) throws IOException {
+    private void addLineArray(BufferedReader reader) throws IOException {
         String line = reader.readLine();
 
         while (line != null) {
@@ -36,13 +40,30 @@ public class File {
                 continue;
             }
 
-            list.add(line.split(";"));
+            String[] linesArray = line.split(";");
+
+            map.put(linesArray[0], Double.parseDouble(linesArray[1]));
 
             line = reader.readLine();
         }
     }
 
-    public ArrayList<String[]> getList() {
-        return list;
+    public void readJson(String nameFile) throws MalformedURLException {
+        URL url = new URL(nameFile);
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
+            Gson gson = new Gson();
+
+            Model model = gson.fromJson(reader, Model.class);
+
+            map.putAll(model.getRates());
+
+        } catch (IOException e) {
+            System.out.println("Не удается найти указанный файл: " + nameFile);
+        }
+    }
+
+    public Map<String, Double> getMap() {
+        return map;
     }
 }
