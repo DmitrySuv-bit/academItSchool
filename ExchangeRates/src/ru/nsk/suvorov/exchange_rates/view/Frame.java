@@ -1,18 +1,20 @@
 package ru.nsk.suvorov.exchange_rates.view;
 
-import ru.nsk.suvorov.exchange_rates.model.File;
+import ru.nsk.suvorov.exchange_rates.model.MyFile;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.Map;
 
 public class Frame implements View {
     private JComboBox<String> currency;
     private JTextField rate;
-    private final ArrayList<String[]> exchangeRatesArrays;
+    private final Map<String, Double> exchangeRatesMap;
 
-    public Frame(File file) {
-        exchangeRatesArrays = file.getList();
+    // gson / jackson json / json-simple
+
+    public Frame(MyFile file) {
+        exchangeRatesMap = file.getMap();
     }
 
     @Override
@@ -26,17 +28,17 @@ public class Frame implements View {
 
     private void initEvents() {
         currency.addActionListener(e -> {
-            for (String[] s : exchangeRatesArrays) {
-                if (currency.getSelectedItem() == s[0]) {
-                    rate.setText(s[1]);
+            for (Map.Entry<String, Double> entry : exchangeRatesMap.entrySet()) {
+                if (currency.getSelectedItem() == entry.getKey()) {
+                    rate.setText(String.valueOf(entry.getValue()));
                 }
             }
         });
     }
 
     private void addCurrency() {
-        for (String[] s : exchangeRatesArrays) {
-            currency.addItem(s[0]);
+        for (String key : exchangeRatesMap.keySet()) {
+            currency.addItem(key);
         }
 
         currency.setSelectedIndex(-1);
