@@ -5,21 +5,25 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.UserInfo;
 
 public class MySession {
-    private com.jcraft.jsch.Session createSession(String hostName, String userName, String password, int port) throws JSchException {
+    public static void createSession(String hostName, String userName, String password, int port)  {
         JSch jSch = new JSch();
 
-        com.jcraft.jsch.Session session = jSch.getSession(hostName, userName, port);
+        try {
+            com.jcraft.jsch.Session session = jSch.getSession(userName, hostName, port);
 
-        session.setPassword(password);
+            session.setPassword(password);
 
-        UserInfo userInfo = new MyUserInfo();
+            UserInfo userInfo = new MyUserInfo();
 
-        session.setUserInfo(userInfo);
+            session.setUserInfo(userInfo);
 
-        session.setConfig("StrictHostKeyChecking", "no");
+            session.setConfig("StrictHostKeyChecking", "no");
 
-        session.connect(10000);
+            session.connect();
+        } catch (JSchException e) {
+            e.printStackTrace();
+        }
 
-        return session;
+
     }
 }

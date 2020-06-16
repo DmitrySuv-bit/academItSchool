@@ -8,6 +8,5 @@ public class SSHMain {
         View view = new Frame();
 
         view.startApplication();
-
     }
 }

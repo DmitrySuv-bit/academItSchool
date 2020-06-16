@@ -1,5 +1,7 @@
 package view;
 
+import model.MySession;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -9,12 +11,31 @@ public class Frame implements View {
     private JTextField passwordText;
     private JTextField portText;
     private JButton connect;
+    private String hostName;
+    private String userName;
+    private String password;
+    private int port;
 
     public void startApplication() {
-        SwingUtilities.invokeLater(this::createFrame);
+        SwingUtilities.invokeLater(() -> {
+            createFrame();
+            initEvents();
+        });
     }
 
-    public void createFrame() {
+    private void initEvents() {
+        hostNameText.addActionListener(e -> hostName = hostNameText.getText());
+
+        userNameText.addActionListener(e -> userName = userNameText.getText());
+
+        passwordText.addActionListener(e -> password = passwordText.getText());
+
+        portText.addActionListener(e -> port = portText.getHorizontalAlignment());
+
+        connect.addActionListener(e -> MySession.createSession(hostName, userName, password, port));
+    }
+
+    private void createFrame() {
         JFrame frame = new JFrame("Exchange Rates");
 
         frame.setVisible(true);
